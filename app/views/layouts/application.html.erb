@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CatanLeaderboards</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <%= nav_bar brand: "Ranking Catan", brand_link: root_path, responsive: true do%>
+
+      <% if user_signed_in? %>
+        <%= menu_group pull: :right do %>
+          <%= menu_item (["Logged in as ","<strong>",current_user.email,"</strong>"].join("")).html_safe, edit_user_registration_path %>
+          <%= menu_item (t :sign_out), destroy_user_session_path, method: :delete %>
+        <% end %>
+      <% else %>
+          <%= simple_form_for(:user, :url => session_path(:user), :html => { :class => "navbar-form pull-right" } ) do |f| %>
+              <%= f.input :email, as: :email, label: false,  placeholder: "Usuario"  %>
+              <%= f.input :password, as: :password, label: false,  placeholder: "Contraseña"%>
+              <%= f.input :remember_me, as: :boolean, inline_label: "¿Recordarme?" %>
+              <%= f.button :submit, value: 'Iniciar Sesion' %>
+              <%= link_to "¿Olvido su contraseña?", new_password_path(:user) %>
+          <% end %>
+      <% end %>
+
+
+    <% end %>
+    <div class="container">
+      <%= yield %>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,18 @@
+es:
+  hello: "Hello world"
+  sign_up: "Registrarse"
+  sign_in: "Iniciar sesion"
+  sign_out: "Cerrar sesion"
+  recover_password: "¿Olvidaste tu contraseña?"
+  input_your_data: "Por favor, ingrese sus datos:"
+  new_password: "Cambie su contraseña:"
+
+  activerecord:
+      models:
+        user:
+          one: "Usuario"
+          two: "Usuarios"
+
+      attributes:
+        user:
+          email: "E-mail"

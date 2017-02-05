@@ -6,13 +6,49 @@ es:
   recover_password: "¿Olvidaste tu contraseña?"
   input_your_data: "Por favor, ingrese sus datos:"
   new_password: "Cambie su contraseña:"
+  change_password: "Cambiar contraseña"
+
+  register_phase: "Periodo de Inscripcion"
+  ongoing: "En proceso"
+  finalized: "Finalizado"
 
   activerecord:
       models:
         user:
           one: "Usuario"
           two: "Usuarios"
+        tournament:
+          one: "Torneo"
+          two: "Torneos"
 
       attributes:
         user:
           email: "E-mail"
+        tournament:
+          name: "Nombre"
+          number_players: "Numero de participantes"
+          prize: "Premio"
+          entrance_fee: "Coste de Entrada"
+          date: "Fecha"
+          user: "Encargado"
+
+
+  table_text:
+      sProcessing:      "Procesando..."
+      sLengthMenu:      "Mostrar _MENU_ registros"
+      sZeroRecords:    "No se encontraron resultados"
+      sEmptyTable:      "Ningún dato disponible en esta tabla"
+      sInfo:           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros"
+      sInfoEmpty:      "Mostrando registros del 0 al 0 de un total de 0 registros"
+      sInfoFiltered:   "(filtrado de un total de _MAX_ registros)"
+      sInfoPostFix:    ""
+      sSearch:         "Buscar:"
+      sUrl:            ""
+      sInfoThousands:  ","
+      sLoadingRecords: "Cargando..."
+      sFirst:          "Primero"
+      sLast:           "Último"
+      sNext:           "Siguiente"
+      sPrevious:       "Anterior"
+      sSortAscending:  ": Activar para ordenar la columna de manera ascendente"
+      sSortDescending: ": Activar para ordenar la columna de manera descendente"

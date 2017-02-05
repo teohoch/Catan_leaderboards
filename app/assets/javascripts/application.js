@@ -12,7 +12,11 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap
+//= require jquery.turbolinks
 //= require turbolinks
+//= require turbolinks-compatibility
+//= require twitter/bootstrap
+//= require jquery-ui
+//= require dataTables/jquery.dataTables
 //= require_tree .
 

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tournaments
   get 'home/index'
 
   get 'home/show'

@@ -45,11 +45,18 @@ gem 'jquery-turbolinks'
 gem 'devise'
 gem 'devise-i18n'
 
+gem 'cancancan'
+
 gem "twitter-bootstrap-rails"
 gem 'simple_form'
+gem 'client_side_validations'
+gem 'client_side_validations-simple_form'
 
 
 gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
+gem 'bootstrap-datepicker-rails'
+
+
 
 
 group :development, :test do
@@ -64,6 +71,11 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  #gem 'i18n-debug'
+
+  gem "better_errors"
+  gem "binding_of_caller"
+  gem 'meta_request'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

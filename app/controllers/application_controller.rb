@@ -1,27 +1,27 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
-  def flash_message(type, text)
-    flash[type] ||= []
-    flash[type] << text
-  end
-
-  def render_flash
-    rendered = []
-    flash.each do |type, messages|
-      if messages.is_a? Array
-        messages.each do |m|
-          rendered << render(:partial => 'layouts/flash_message', :locals => {:type => type, :message => m}) unless m.blank?
-        end
-      else
-        rendered << render(:partial => 'layouts/flash_message', :locals => {:type => type, :message => messages}) unless messages.blank?
-      end
+  def back_or_default(default = root_url)
+    if request.env["HTTP_REFERER"].present? and request.env["HTTP_REFERER"] != request.env["REQUEST_URI"]
+      :back
+    else
+      default
     end
-    html = rendered.join.squish
-    return html.html_safe
   end
 
-  def bootstrap_class_for flash_type
-    { success: 'alert-success', error: 'alert-danger', warning: 'alert-warning', notice: 'alert-info', alert: "alert-danger"}[flash_type.to_sym]
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.json { head :forbidden }
+      format.html { redirect_to back_or_default, :alert => exception.message }
+    end
   end
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+  end
+
+
 end

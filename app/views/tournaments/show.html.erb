@@ -1,29 +1,29 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong><%= Tournament.human_attribute_name(:name) %>:</strong>
   <%= @tournament.name %>
 </p>
 
 <p>
-  <strong>Number players:</strong>
+  <strong><%= Tournament.human_attribute_name(:number_players) %>:</strong>
   <%= @tournament.number_players %>
 </p>
 
 <p>
-  <strong>Price:</strong>
+  <strong><%= Tournament.human_attribute_name(:prize) %>:</strong>
   <%= @tournament.prize %>
 </p>
 
 <p>
-  <strong>Entrance fee:</strong>
+  <strong><%= Tournament.human_attribute_name(:entrance_fee) %>:</strong>
   <%= @tournament.entrance_fee %>
 </p>
 
 <p>
-  <strong>User:</strong>
-  <%= @tournament.user %>
+  <strong><%= Tournament.human_attribute_name(:user) %>:</strong>
+  <%= @tournament.user.name %>
 </p>
 
-<%= link_to 'Edit', edit_tournament_path(@tournament) %> |
+<% if can? :update, @tournament %><%= link_to 'Edit', edit_tournament_path(@tournament) %> | <% end %>
 <%= link_to 'Back', tournaments_path %>

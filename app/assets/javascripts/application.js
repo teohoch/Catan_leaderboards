@@ -18,5 +18,37 @@
 //= require twitter/bootstrap
 //= require jquery-ui
 //= require dataTables/jquery.dataTables
+//= require bootstrap-datepicker/core
+//= require bootstrap-datepicker/locales/bootstrap-datepicker.es.js
+//= require rails.validations
+//= require rails.validations.simple_form
 //= require_tree .
 
+$(function() {
+    var mindate = -Infinity;
+    var maxdate = Infinity;
+    var language = "en"
+    var raw_mindate = $('input.datepicker').data("mindate");
+    var raw_maxdate = $('input.datepicker').data("maxdate");
+    if($('body').data("locale")){
+        language = $('body').data("locale")
+    }
+
+    if (raw_mindate){
+        mindate = new Date(raw_mindate)
+    }
+    if (raw_maxdate){
+        maxdate = new Date(raw_maxdate)
+    }
+
+    $('input.datepicker').data({behaviour: "datepicker"}).datepicker({
+        startDate: mindate,
+        endDate: maxdate,
+        language: language
+    });
+
+    $('[data-toggle="tooltip"]').tooltip()
+
+
+
+});

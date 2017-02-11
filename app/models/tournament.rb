@@ -1,5 +1,28 @@
 class Tournament < ApplicationRecord
   belongs_to :user
+  attr_accessor :general_mode
+
+  validates_presence_of :name, :number_players, :prize, :entrance_fee, :user_id, :date, :rounds, :mode
+
+
+  def general_mode_human
+    if self.mode == 0
+      I18n.t "tournamet_modes.free4all"
+    else
+      I18n.t "tournamet_modes.pyramidal"
+    end
+  end
+
+
+  MODES = {(I18n.t "tournamet_modes.free4all")=> 0,
+           (I18n.t "tournamet_modes.pyramidal") => 1}
+  PYRAMIDAL_MODES = {
+      (I18n.t "tournamet_modes.onewinner") => 1,
+      (I18n.t "tournamet_modes.twowinner") => 2,
+      (I18n.t "tournamet_modes.threewinner") => 3,
+      (I18n.t "tournamet_modes.fourwinner") => 4,
+      (I18n.t "tournamet_modes.fivewinner") => 5
+  }
 
   def status_human
     case self.status
@@ -9,6 +32,23 @@ class Tournament < ApplicationRecord
         t "ongoing"
       when 2
         t "finalized"
+    end
+  end
+
+  def mode_human
+    case self.mode
+      when 0
+        t "tournamet_modes.free4all"
+      when 1
+        t "tournamet_modes.onewinner"
+      when 2
+        t "tournamet_modes.twowinner"
+      when 3
+        t "tournamet_modes.threewinner"
+      when 4
+        t "tournamet_modes.fourwinner"
+      when 5
+        t "tournamet_modes.fivewinner"
     end
   end
 end

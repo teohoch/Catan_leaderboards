@@ -16,14 +16,19 @@ ActiveRecord::Schema.define(version: 20170203165243) do
   enable_extension "plpgsql"
 
   create_table "tournaments", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "number_players"
-    t.string   "prize"
-    t.integer  "entrance_fee"
-    t.date     "date"
+    t.string   "name",                       null: false
+    t.integer  "number_players",             null: false
+    t.string   "prize",                      null: false
+    t.integer  "entrance_fee",               null: false
+    t.date     "date",                       null: false
+    t.integer  "status",         default: 0, null: false
+    t.integer  "match_players",  default: 4, null: false
+    t.integer  "mode",           default: 0, null: false
+    t.integer  "rounds"
+    t.integer  "registered",     default: 0, null: false
     t.integer  "user_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
     t.index ["user_id"], name: "index_tournaments_on_user_id", using: :btree
   end
 

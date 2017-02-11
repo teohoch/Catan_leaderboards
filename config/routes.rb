@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :tournaments
+
+  authenticate :user do
+    resources :tournaments, only: [:new, :create, :edit, :update, :destroy]
+  end
+  resources :tournaments, only: [:index, :show]
   get 'home/index'
 
   get 'home/show'

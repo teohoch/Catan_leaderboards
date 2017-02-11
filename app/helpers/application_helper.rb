@@ -24,6 +24,11 @@ module ApplicationHelper
     { success: 'alert-success', error: 'alert-danger', warning: 'alert-warning', notice: 'alert-info', alert: "alert-danger"}[flash_type.to_sym]
   end
 
+  def insert_fields_data(f, title, name)
+    fields = render(title+ "_fields", f: f)
+    {name => fields.gsub("\n", "")}
+  end
+
   def datatable_language
     if I18n.exists?("table_text.sInfoFiltered")
       {

@@ -11,27 +11,85 @@ es:
   register_phase: "Periodo de Inscripcion"
   ongoing: "En proceso"
   finalized: "Finalizado"
+  create: "Crear"
+  edit: "Editar"
+  destroy: "Destruir"
+  show: "Mostrar"
+  new: "Nuevo"
+  back: "Atras"
+  succesfully_created: "creado con exito."
 
   activerecord:
       models:
         user:
           one: "Usuario"
-          two: "Usuarios"
+          other: "Usuarios"
         tournament:
           one: "Torneo"
-          two: "Torneos"
+          other: "Torneos"
 
       attributes:
         user:
           email: "E-mail"
         tournament:
           name: "Nombre"
-          number_players: "Numero de participantes"
+          number_players: "Numero maximo de participantes"
           prize: "Premio"
           entrance_fee: "Coste de Entrada"
-          date: "Fecha"
+          date: "Fecha de Inicio"
           user: "Encargado"
+          rounds: "N° de Rondas"
+          general_mode: "Modalidad de Torneo"
+      errors:
+        models:
+          tournament:
+            attributes:
+              entrance_fee:
+                blank: "El coste de entrada no puede estar en blanco."
+              name:
+                blank: "El nombre del Torneo no puede estar en blanco."
+              prize:
+                blank: "El Premio del Torneo no puede estar en blanco."
+              date:
+                blank: "La fecha de inicio del torneo no puede estar en blanco."
+              general_mode:
+                blank: "La modalidad del torneo no puede estar en blanco."
+              number_players:
+                blank: "El numero maximo de participantes no puede estar en blanco."
+              rounds:
+                blank: "El numero de rondas no puede estar en blanco."
+              mode:
+                blank: "El numero de ganadores por partida no puede estar en blanco."
 
+
+  unauthorized:
+      update:
+        tournament: "¡Usted no tiene permiso para editar este torneo!"
+
+
+
+
+  helpers:
+    submit:
+      tournament:
+        create: "Crear Torneo"
+
+  date:
+      order:
+        - :day
+        - :month
+        - :year
+
+  tournamet_modes:
+    free4all: "Victoria por Ranking"
+    pyramidal: "Torneo Piramidal"
+    onewinner: "Pasa uno"
+    twowinner: "Pasan dos"
+    threewinner: "Pasan tres"
+    fourwinner: "Pasan cuatro"
+    fivewinner: "Pasan cinco"
+    pyramidal_tooltip: "De cada partida, cuantos jugadores pasan a la siguiente etapa. Por ejemplo, de selecionar 2, los dos jugadores con mayor puntaje en la partida pasan a la siguiente etapa."
+    ranking_tooltip: "Numero de rondas de todos contra todos en el torneo"
 
   table_text:
       sProcessing:      "Procesando..."

@@ -4,6 +4,7 @@
     <%= devise_error_messages! %>
     <div class="form-inputs">
       <%= f.input :email %>
+      <%= f.input :name %>
       <%= f.input :password, as: :password, input_html: {autocomplete: "off"} %>
       <%= f.input :password_confirmation, as: :password %>
     </div>

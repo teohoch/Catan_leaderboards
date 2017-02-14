@@ -1,5 +1,6 @@
 class Tournament < ApplicationRecord
   belongs_to :user
+  has_many :inscriptions
   attr_accessor :general_mode
 
   validates_presence_of :name, :number_players, :prize, :entrance_fee, :user_id, :date, :rounds, :mode
@@ -27,28 +28,28 @@ class Tournament < ApplicationRecord
   def status_human
     case self.status
       when 0
-        t "register_phase"
+        I18n.t "register_phase"
       when 1
-        t "ongoing"
+        I18n.t "ongoing"
       when 2
-        t "finalized"
+        I18n.t "finalized"
     end
   end
 
   def mode_human
     case self.mode
       when 0
-        t "tournamet_modes.free4all"
+        I18n.t "tournamet_modes.free4all"
       when 1
-        t "tournamet_modes.onewinner"
+        I18n.t "tournamet_modes.onewinner"
       when 2
-        t "tournamet_modes.twowinner"
+        I18n.t "tournamet_modes.twowinner"
       when 3
-        t "tournamet_modes.threewinner"
+        I18n.t "tournamet_modes.threewinner"
       when 4
-        t "tournamet_modes.fourwinner"
+        I18n.t "tournamet_modes.fourwinner"
       when 5
-        t "tournamet_modes.fivewinner"
+        I18n.t "tournamet_modes.fivewinner"
     end
   end
 end

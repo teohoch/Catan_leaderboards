@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :tournaments, only: [:new, :create, :edit, :update, :destroy]
   end
   resources :tournaments, only: [:index, :show]
+  resources :inscriptions
   get 'home/index'
 
   get 'home/show'

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  tournament: one
+  present_position: 1
+  present_round: 1
+  score: 1
+
+two:
+  user: two
+  tournament: two
+  present_position: 1
+  present_round: 1
+  score: 1

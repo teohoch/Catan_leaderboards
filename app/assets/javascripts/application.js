@@ -22,6 +22,7 @@
 //= require bootstrap-datepicker/locales/bootstrap-datepicker.es.js
 //= require rails.validations
 //= require rails.validations.simple_form
+//= require data-confirm-modal
 //= require_tree .
 
 $(function() {

@@ -18,6 +18,13 @@ es:
   new: "Nuevo"
   back: "Atras"
   succesfully_created: "creado con exito."
+  succesfully_destroyed: "creado con exito."
+  succesfully_subscribed: "Inscripcion realizada con exito."
+  succesfully_unsubscribed: "Desinscripcion realizada con exito."
+  register: "Inscribirse"
+  unregister: "Desinscribir"
+  are_you_sure: "¿Esta seguro que desea realizar esta accion?"
+
 
   activerecord:
       models:
@@ -27,6 +34,9 @@ es:
         tournament:
           one: "Torneo"
           other: "Torneos"
+        inscription:
+          one: "Inscripcion"
+          other: "Inscripciones"
 
       attributes:
         user:
@@ -40,6 +50,7 @@ es:
           user: "Encargado"
           rounds: "N° de Rondas"
           general_mode: "Modalidad de Torneo"
+          status: "Estatus"
       errors:
         models:
           tournament:
@@ -60,6 +71,10 @@ es:
                 blank: "El numero de rondas no puede estar en blanco."
               mode:
                 blank: "El numero de ganadores por partida no puede estar en blanco."
+          inscription:
+            attributes:
+              base:
+                oncourse: "El Torneo esta en curso, no es posible desinscribir."
 
 
   unauthorized:

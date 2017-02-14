@@ -11,6 +11,12 @@ class TournamentsController < ApplicationController
   # GET /tournaments/1
   # GET /tournaments/1.json
   def show
+    @registered = (!@tournament.inscriptions.find_by(:user_id => current_user.id).nil?)
+    if not @registered
+      @inscription = Inscription.new(:tournament_id=> @tournament.id)
+    else
+      @inscription = @tournament.inscriptions.find_by(:user_id => current_user.id)
+    end
   end
 
   # GET /tournaments/new

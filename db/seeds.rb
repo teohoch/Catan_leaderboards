@@ -12,3 +12,34 @@ fuser = User.new(:email => "teohoch2@gmail.com",
                  :password_confirmation => 'password')
 
 fuser.save
+
+fuser2 = User.new(:email => "teodoro.hochfarber@gmail.com",
+                 :name => "Teo2",
+                 :password => 'password',
+                 :password_confirmation => 'password')
+
+fuser2.save
+
+tournament1 = Tournament.new(
+    :name => "Torneo1",
+    :user_id => fuser.id,
+    :number_players => 8,
+    :prize => "Something Shiny",
+    :entrance_fee => 10500,
+    :date => Date.tomorrow,
+    :rounds => 2,
+    :mode => 0)
+
+tournament1.save
+
+tournament2 = Tournament.new(
+    :name => "Torneo2",
+    :user_id => fuser.id,
+    :number_players => 8,
+    :prize => "Something opaque",
+    :entrance_fee => 10500,
+    :date => Date.tomorrow,
+    :rounds => 0,
+    :mode => 2)
+
+tournament2.save

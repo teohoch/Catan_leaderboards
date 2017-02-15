@@ -1,32 +1,35 @@
-<p>
-  <strong><%= Tournament.human_attribute_name(:name) %>:</strong>
-  <%= @tournament.name %>
-</p>
 
-<p>
-  <strong><%= Tournament.human_attribute_name(:number_players) %>:</strong>
-  <%= @tournament.number_players %>
-</p>
+<table class="display table table-condensed table-responsive">
+  <thead>
 
-<p>
-  <strong><%= Tournament.human_attribute_name(:prize) %>:</strong>
-  <%= @tournament.prize %>
-</p>
+    <th><h3>Datos del Torneo</h3></th>
+  </thead>
+  <tbody>
+    <% @tournament.attributes.each do |attribute_name, attribute_value| %>
+      <% if not ["id", "created_at","updated_at"].include? attribute_name  %>
+        <tr>
+          <% if attribute_name == "user_id" %>
+              <td><%= Tournament.human_attribute_name(:user) %></td>
+              <td><%= @tournament.user.name %></td>
+          <% elsif attribute_name == "mode" %>
+              <td><%= Tournament.human_attribute_name(:general_mode) %></td>
+              <td><%= @tournament.general_mode_human %></td>
+          <% elsif attribute_name == "status" %>
+              <td><%= Tournament.human_attribute_name(:status) %></td>
+              <td><%= @tournament.status_human %></td>
+          <% else %>
+            <td> <%= Tournament.human_attribute_name(attribute_name) %> </td>
+            <td> <%= attribute_value %> </td>
+          <% end %>
+        </tr>
+      <% end %>
+    <% end %>
 
-<p>
-  <strong><%= Tournament.human_attribute_name(:entrance_fee) %>:</strong>
-  <%= @tournament.entrance_fee %>
-</p>
+  </tbody>
 
-<p>
-  <strong><%= Tournament.human_attribute_name(:status) %>:</strong>
-  <%= @tournament.status_human %>
-</p>
 
-<p>
-  <strong><%= Tournament.human_attribute_name(:user) %>:</strong>
-  <%= @tournament.user.name %>
-</p>
+</table>
+
 
 <div class="row">
   <% if can? :update, @tournament %>

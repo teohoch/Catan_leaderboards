@@ -7,7 +7,7 @@ class CreateTournaments < ActiveRecord::Migration[5.0]
       t.integer :entrance_fee, null: false
       t.date :date, null: false
       t.integer :status, null: false, default: 0
-      t.integer :match_players, null: false, default: 4
+      t.integer :board_size, null: false, default: 4
       t.integer :mode, null: false, default: 0
       t.integer :rounds
       t.integer :registered, null: false, default: 0

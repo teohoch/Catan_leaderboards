@@ -4,14 +4,12 @@
   <div class="form-inputs">
 
     <%= f.input :name %>
-    <%= f.input :number_players, input_html: { min: '0', step: 1 }%>
+    <%= f.input :board_size, collection: [4,6], include_blank: false %>
+    <%= f.input :general_mode, required: true, as: :radio_buttons, collection: Tournament::MODES, include_blank: false, wrapper_html: { id: 'general_mode', data: (insert_fields_data(f,"ranking","ranking").merge(insert_fields_data(f,"pyramidal","pyramidal")).merge(insert_fields_data(f,"max_players","max_players")))}%>
     <%= f.input :prize %>
     <%= f.input :entrance_fee, input_html: { min: '0', step: 1 } %>
-    <%= f.input :general_mode, required: true, as: :radio_buttons, collection: Tournament::MODES, include_blank: false, wrapper_html: { id: 'general_mode', data: (insert_fields_data(f,"ranking","ranking").merge(insert_fields_data(f,"pyramidal","pyramidal")))}%>
     <%= f.input :date, as: :string, input_html: {class: "datepicker", readonly: "readonly" , data: {minDate: Date.current}} %>
-
   </div>
-
   <div class="form-actions">
     <%= f.button :submit %>
   </div>

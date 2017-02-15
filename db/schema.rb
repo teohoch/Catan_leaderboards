@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20170211225850) do
     t.integer  "entrance_fee",               null: false
     t.date     "date",                       null: false
     t.integer  "status",         default: 0, null: false
-    t.integer  "match_players",  default: 4, null: false
+    t.integer  "board_size",     default: 4, null: false
     t.integer  "mode",           default: 0, null: false
     t.integer  "rounds"
     t.integer  "registered",     default: 0, null: false

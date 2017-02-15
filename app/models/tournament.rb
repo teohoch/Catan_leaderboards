@@ -4,6 +4,9 @@ class Tournament < ApplicationRecord
   attr_accessor :general_mode
 
   validates_presence_of :name, :number_players, :prize, :entrance_fee, :user_id, :date, :rounds, :mode
+  validates :board_size, inclusion: {in: [4,6]}
+  validates :number_players, inclusion: {in: 3..16 }
+  validates :mode, inclusion: { in: -1..5}
 
 
   def general_mode_human
@@ -17,7 +20,10 @@ class Tournament < ApplicationRecord
 
   MODES = {(I18n.t "tournamet_modes.free4all")=> 0,
            (I18n.t "tournamet_modes.pyramidal") => 1}
+
   PYRAMIDAL_MODES = {
+      (I18n.t "tournamet_modes.not_allowed") => -2,
+      (I18n.t "tournamet_modes.instantwinner") => -1,
       (I18n.t "tournamet_modes.onewinner") => 1,
       (I18n.t "tournamet_modes.twowinner") => 2,
       (I18n.t "tournamet_modes.threewinner") => 3,
@@ -38,6 +44,8 @@ class Tournament < ApplicationRecord
 
   def mode_human
     case self.mode
+      when -1
+        I18n.t "tournamet_modes.instantwinner"
       when 0
         I18n.t "tournamet_modes.free4all"
       when 1

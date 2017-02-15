@@ -50,7 +50,10 @@ es:
           user: "Encargado"
           rounds: "N° de Rondas"
           general_mode: "Modalidad de Torneo"
-          status: "Estatus"
+          status: "Estado"
+          board_size: "Tamaño del Tablero"
+          registered: "Jugadores Inscritos"
+
       errors:
         models:
           tournament:
@@ -67,10 +70,14 @@ es:
                 blank: "La modalidad del torneo no puede estar en blanco."
               number_players:
                 blank: "El numero maximo de participantes no puede estar en blanco."
+                inclusion: "El numero de jugadores debe estar entre 3 y 16."
               rounds:
                 blank: "El numero de rondas no puede estar en blanco."
               mode:
                 blank: "El numero de ganadores por partida no puede estar en blanco."
+              board_size:
+                blank: "El tamaño del tablero no puede estar en blanco."
+                inclusion: "El tamaño del tablero es invalido. Solo existen tableros de 4 y 6 personas."
           inscription:
             attributes:
               base:
@@ -98,6 +105,8 @@ es:
   tournamet_modes:
     free4all: "Victoria por Ranking"
     pyramidal: "Torneo Piramidal"
+    not_allowed: "Esta configuracion no esta permitida, elija otro numero de participantes."
+    instantwinner: "Victoria inmediata"
     onewinner: "Pasa uno"
     twowinner: "Pasan dos"
     threewinner: "Pasan tres"

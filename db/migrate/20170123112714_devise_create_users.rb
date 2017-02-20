@@ -35,6 +35,13 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.0]
 
       ## Extras
       t.string :name, null: false
+      t.integer :elo_general, null: false, default: 1500
+      t.integer :elo_free, null: false, default: 1500
+      t.integer :elo_tournament, null: false, default: 1500
+      t.integer :position_general, null: false, default: -1
+      t.integer :position_free, null: false, default: -1
+      t.integer :position_tournament, null: false, default: -1
+      t.integer :matches_played, null: false, default: 0
 
     end
 

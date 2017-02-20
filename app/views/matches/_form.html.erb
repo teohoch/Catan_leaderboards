@@ -1,0 +1,25 @@
+<%= simple_form_for @match, validate: true do |f| %>
+    <%= f.error_notification %>
+
+    <div class="form-inputs">
+      <%= f.input :date, as: :string, input_html: {class: "datepicker", readonly: "readonly", data: {minDate: Date.current}} %>
+      <%= f.input :location %>
+      <div class="row">
+        <div class="col-md-3">
+          <%= f.simple_fields_for :user_matches do |m| %>
+              <%= m.association :user, :disabled => true, input_html: {data: {max_users: User.all.count, error_message: (t "activerecord.errors.models.match.attributes.n_players.inclusion")}} %>
+              <%= m.hidden_field :user_id %>
+              <%= m.hidden_field :validated, value: true %>
+          <% end %>
+        </div>
+      </div>
+
+      <%= link_to_add_fields "Agregar Jugador", f, :user_matches, FALSE, "add_purchase_item" %>
+    </div>
+    <br>
+
+    <div class="form-actions">
+      <%= f.button :submit, id: "submit_button" %>
+      <%= link_to (t 'back'), matches_path, class: "btn btn-danger" %>
+    </div>
+<% end %>

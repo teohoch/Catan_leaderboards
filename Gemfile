@@ -52,6 +52,8 @@ gem 'simple_form'
 gem 'client_side_validations'
 gem 'client_side_validations-simple_form'
 
+gem 'counter_culture'
+
 
 gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
 gem 'bootstrap-datepicker-rails'

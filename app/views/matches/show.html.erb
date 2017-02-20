@@ -1,0 +1,72 @@
+<table class="display table table-condensed table-responsive">
+  <thead>
+
+  <th><h3>Datos de la Partida</h3></th>
+  </thead>
+  <tbody>
+  <% @match.attributes.each do |attribute_name, attribute_value| %>
+      <% if not ["id", "created_at", "updated_at", "round", "pyramidal_position"].include? attribute_name %>
+          <tr>
+            <% if attribute_name == "tournament_id" %>
+                <% if attribute_value != nil %>
+                    <td><%= Match.human_attribute_name(:tournament) %></td>
+                    <td><%= attribute_value %></td>
+                <% end %>
+            <% elsif attribute_name == "validated" %>
+                <td><%= Match.human_attribute_name(:validated) %></td>
+                <td><%= @match.validated_human %></td>
+            <% else %>
+                <td> <%= Match.human_attribute_name(attribute_name) %> </td>
+                <td> <%= attribute_value %> </td>
+            <% end %>
+          </tr>
+      <% end %>
+  <% end %>
+  </tbody>
+</table>
+<h3>Jugadores</h3>
+<table class="display table table-condensed table-responsive">
+  <thead>
+  <th><%= User.human_attribute_name(:name) %> </th>
+  <th><%= User.human_attribute_name(:email) %></th>
+  <th><%= User.human_attribute_name(:position_general) %></th>
+  <th><%= User.human_attribute_name(:position_tournament) %></th>
+  <th><%= User.human_attribute_name(:position_free) %></th>
+  <th><%= User.human_attribute_name(:matches_played) %></th>
+  </thead>
+  <tbody>
+  <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td><%= user.position_general %></td>
+        <td><%= user.position_tournament %></td>
+        <td><%= user.position_free %></td>
+        <td><%= user.matches_played %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+
+
+<div class="row">
+  <% if can? :update, @match %>
+      <div class="col-md-1">
+        <%= link_to (t 'edit'), edit_match_path(@match), class: "btn btn-info" %>
+      </div>
+  <% end %>
+  <% if not @match.validated and not @user_match.validated %>
+      <div class="col-md-2 center-block">
+        <%= simple_form_for(@user_match) do |f| %>
+            <%= f.input :validated, as: :hidden, :input_html => {:value => true} %>
+            <%= f.button :submit_tag, (t "validate"), :class => "btn btn-success" %>
+        <% end %>
+      </div>
+  <% end %>
+  <div class="col-md-1">
+    <%= link_to (t 'back'), matches_path, class: "btn btn-danger" %>
+  </div>
+
+
+</div>

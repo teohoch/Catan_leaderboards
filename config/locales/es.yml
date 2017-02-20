@@ -15,15 +15,20 @@ es:
   edit: "Editar"
   destroy: "Destruir"
   show: "Mostrar"
-  new: "Nuevo"
+  new_m: "Nuevo"
+  new_f: "Nueva"
   back: "Atras"
   succesfully_created: "creado con exito."
-  succesfully_destroyed: "creado con exito."
+  succesfully_destroyed: "eliminado con exito."
   succesfully_subscribed: "Inscripcion realizada con exito."
   succesfully_unsubscribed: "Desinscripcion realizada con exito."
   register: "Inscribirse"
   unregister: "Desinscribir"
   are_you_sure: "¿Esta seguro que desea realizar esta accion?"
+  positive: "Sí"
+  negatory: "No"
+  validate: "Validar"
+
 
 
   activerecord:
@@ -37,6 +42,9 @@ es:
         inscription:
           one: "Inscripcion"
           other: "Inscripciones"
+        match:
+          one: "Partida"
+          other: "Partidas"
 
       attributes:
         user:
@@ -53,6 +61,16 @@ es:
           status: "Estado"
           board_size: "Tamaño del Tablero"
           registered: "Jugadores Inscritos"
+        match:
+          n_players: "N° de Jugadores"
+          round: "Ronda"
+          pyramidal_position: "Posicion en la piramide"
+          date: "Fecha"
+          location: "Ubicacion"
+          validated: "Validado"
+        user_match:
+          user: "Jugador"
+
 
       errors:
         models:
@@ -82,6 +100,14 @@ es:
             attributes:
               base:
                 oncourse: "El Torneo esta en curso, no es posible desinscribir."
+          match:
+            attributes:
+              n_players:
+                inclusion: "La partida debe tener por lo menos 3 jugadores y a lo mas 6."
+              date:
+                blank: "La fecha no puede estar en blanco."
+              location:
+                blank: "La ubicacion no puede estar en blanco."
 
 
   unauthorized:
@@ -95,12 +121,16 @@ es:
     submit:
       tournament:
         create: "Crear Torneo"
+      match:
+        create: "Crear Partida"
 
   date:
       order:
         - :day
         - :month
         - :year
+
+  currency_precision: 0
 
   tournamet_modes:
     free4all: "Victoria por Ranking"

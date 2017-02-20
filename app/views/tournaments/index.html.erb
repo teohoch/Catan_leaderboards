@@ -1,4 +1,3 @@
-<p id="notice"><%= notice %></p>
 
 <h1> <%= Tournament.model_name.human(count: 2) %> </h1>
 
@@ -25,7 +24,7 @@
         <td><%= tournament.general_mode_human %></td>
         <td><%= tournament.number_players %></td>
         <td><%= tournament.prize %></td>
-        <td><%= tournament.entrance_fee %></td>
+        <td><%= number_to_currency(tournament.entrance_fee, precision: (t "currency_precision")) %></td>
         <td><%= tournament.user.name %></td>
         <td><%= link_to (t "show"), tournament %></td>
         <td><% if can? :update, tournament %><%= link_to (t "edit"), edit_tournament_path(tournament) %><% end %></td>

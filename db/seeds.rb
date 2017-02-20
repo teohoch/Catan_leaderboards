@@ -20,6 +20,20 @@ fuser2 = User.new(:email => "teodoro.hochfarber@gmail.com",
 
 fuser2.save
 
+fuser3 = User.new(:email => "testing@test.com",
+                  :name => "testin1",
+                  :password => 'password',
+                  :password_confirmation => 'password')
+
+fuser3.save
+
+fuser4 = User.new(:email => "testing2@test.com",
+                  :name => "testin2",
+                  :password => 'password',
+                  :password_confirmation => 'password')
+
+fuser4.save
+
 tournament1 = Tournament.new(
     :name => "Torneo1",
     :user_id => fuser.id,

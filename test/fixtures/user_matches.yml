@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  match: one
+  vp: 1
+  elo_general: 1
+  elo_general_change: 1
+  elo_free: 1
+  elo_free_change: 1
+  elo_tournament: 1
+  elo_tournament_change: 1
+  tournament_point: 1
+  victory_position: 1
+
+two:
+  user: two
+  match: two
+  vp: 1
+  elo_general: 1
+  elo_general_change: 1
+  elo_free: 1
+  elo_free_change: 1
+  elo_tournament: 1
+  elo_tournament_change: 1
+  tournament_point: 1
+  victory_position: 1

@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
   has_many :tournaments
   has_many :inscriptions
+  has_many :user_matches
+  has_many :matches, through: :user_matches
 
 
   def to_label

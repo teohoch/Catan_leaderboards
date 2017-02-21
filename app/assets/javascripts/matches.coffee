@@ -11,8 +11,10 @@ jQuery ->
   max_users = $("#match_user_matches_attributes_0_user_id").data("max-users")
   error_message_user_count = $("#match_user_matches_attributes_0_user_id").data("error-message")
   last_id_used = null
-
   used_user_ids.push($("#match_user_matches_attributes_0_user_id").val())
+
+  if max_users >= 3
+    $("#add_purchase_item").show()
 
   language = $('#matches').data('language')
   $("[id^='matches']").dataTable(

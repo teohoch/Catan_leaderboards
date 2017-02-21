@@ -33,11 +33,7 @@ class UserMatchesController < ApplicationController
   def update
     respond_to do |format|
       if @user_match.update(user_match_params)
-        match =Match.find(@user_match.match_id)
-        if not match.validated and match.validated_count >= 2
-          match.update(validated: true)
-        end
-
+        @user_match.match.validate_match()
         format.html { redirect_to back_or_default, notice: 'User match was successfully updated.' }
         format.json { render :show, status: :ok, location: @user_match }
       else

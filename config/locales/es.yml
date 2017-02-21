@@ -28,6 +28,19 @@ es:
   positive: "Sí"
   negatory: "No"
   validate: "Validar"
+  not_asigned: "No Asignado"
+  of: "de"
+  all_matches: "Todas las Partidas"
+  logged_in: "Sesión iniciada como"
+
+  title: "Ranking Jugadores"
+
+  first:  "Primer Lugar"
+  second: "Segundo Lugar"
+  third:  "Tercer Lugar"
+  fourth: "Cuarto Lugar"
+  fith:   "Quinto Lugar"
+  sixth:  "Sexto Lugar"
 
 
 
@@ -49,6 +62,12 @@ es:
       attributes:
         user:
           email: "E-mail"
+          name: "Nombre"
+          position_general: "Ranking General"
+          position_free: "Ranking Libre"
+          position_tournament: "Ranking Torneos"
+          matches_played: "Partidas Jugadas"
+
         tournament:
           name: "Nombre"
           number_players: "Numero maximo de participantes"
@@ -70,6 +89,7 @@ es:
           validated: "Validado"
         user_match:
           user: "Jugador"
+          vp: "Puntos de Victoria"
 
 
       errors:
@@ -113,9 +133,6 @@ es:
   unauthorized:
       update:
         tournament: "¡Usted no tiene permiso para editar este torneo!"
-
-
-
 
   helpers:
     submit:

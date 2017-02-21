@@ -17,3 +17,7 @@
  *= require dataTables/src/jquery.dataTables_themeroller
  *= require bootstrap-datepicker3
  */
+
+.center_element {
+    text-align: center;
+}

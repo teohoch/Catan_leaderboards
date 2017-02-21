@@ -13,12 +13,12 @@
 
       <% if user_signed_in? %>
           <%= menu_group pull: :left do %>
-              <%= menu_item (Tournament.model_name.human), tournaments_path,  turbolinks: false %>
-              <%= menu_item (Match.model_name.human), matches_path, turbolinks: false %>
+              <%= menu_item (Tournament.model_name.human(count: 2)), tournaments_path, turbolinks: false %>
+              <%= menu_item (Match.model_name.human(count: 2)), matches_path, turbolinks: false %>
           <% end %>
 
         <%= menu_group pull: :right do %>
-          <%= menu_item (["Logged in as ","<strong>",current_user.email,"</strong>"].join("")).html_safe, edit_user_registration_path %>
+              <%= menu_item ([(t "logged_in"), "<strong>", current_user.email, "</strong>"].join(" ")).html_safe, edit_user_registration_path %>
           <%= menu_item (t :sign_out), destroy_user_session_path, method: :delete %>
         <% end %>
       <% else %>
@@ -38,6 +38,7 @@
 
     <div class="container">
       <%= yield %>
+      <br><br>
     </div>
 
   </body>

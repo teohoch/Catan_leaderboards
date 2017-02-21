@@ -1,5 +1,6 @@
 class MatchesController < ApplicationController
   before_action :set_match, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /matches
   # GET /matches.json
@@ -14,7 +15,8 @@ class MatchesController < ApplicationController
   # GET /matches/1.json
   def show
     @user_match = UserMatch.find_by(user_id: current_user.id, match_id: @match.id)
-    @users = @match.users
+    @users = User.joins(:user_matches).select(
+        "users.*, user_matches.vp, user_matches.victory_position").where("user_matches.match_id" => @match.id)
   end
 
   # GET /matches/new
@@ -29,15 +31,16 @@ class MatchesController < ApplicationController
   # POST /matches
   # POST /matches.json
   def create
-    @match = Match.new(match_params)
+    success = Match.new_with_child(match_params)
 
     respond_to do |format|
-      if @match.save
-        format.html { redirect_to @match, notice: 'Match was successfully created.' }
+      if success[:state]
+        format.html { redirect_to success[:object], notice: 'Match was successfully created.' }
         format.json { render :show, status: :created, location: @match }
       else
+        flash_message(:error, success[:errors])
         format.html { render :new }
-        format.json { render json: @match.errors, status: :unprocessable_entity }
+        format.json { render json: success[:errors], status: :unprocessable_entity }
       end
     end
   end
@@ -74,6 +77,6 @@ class MatchesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def match_params
-    params.require(:match).permit(:n_players, :round, :pyramidal_position, :date, :location, user_matches_attributes: [:user_id, :validated, :_destroy])
+    params.require(:match).permit(:n_players, :round, :pyramidal_position, :date, :location, user_matches_attributes: [:user_id, :validated, :vp, :_destroy])
   end
 end

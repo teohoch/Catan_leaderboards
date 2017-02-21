@@ -51,6 +51,8 @@ jQuery ->
   $('#submit_button').click ->
     for id in used_user_field_ids
       $("#match_user_matches_attributes_" + id + "_user_id").prop("disabled", false)
+      $("#match_user_matches_attributes_" + id + "_vp").prop("disabled", false)
+
     if user_counter < 3 or user_counter > 6 or user_counter > max_users
       alert_html = '<div class="container alert alert-danger fade in"> <button class="close" data-dismiss="alert">×</button> <p>' + error_message_user_count + '</p> </div>'
       $(".container").last().before(alert_html)
@@ -71,7 +73,11 @@ jQuery ->
         used_user_ids.splice(unused_id_place, 1)
       if (id != "0")
         last_id_used = id
-        previous.prop("disabled", false)
+        $("#match_user_matches_attributes_" + id + "_user_id").prop("disabled", false)
+        $("#match_user_matches_attributes_" + id + "_vp").prop("disabled", false)
+
+
+
       else
         last_id_used = null
 
@@ -89,6 +95,7 @@ jQuery ->
     if user_counter <= max or user_counter <= max_users
       if last_id_used != null
         $("#match_user_matches_attributes_" + last_id_used + "_user_id").prop("disabled", true)
+        # $("#match_user_matches_attributes_" + last_id_used + "_vp").prop("disabled", true)
         used_user_ids.push($("#match_user_matches_attributes_" + last_id_used + "_user_id").val())
       last_id_used = field_adder($(this), event)
       used_user_field_ids.push(last_id_used)

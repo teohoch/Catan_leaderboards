@@ -4,6 +4,7 @@ class CreateUserMatches < ActiveRecord::Migration[5.0]
       t.references :user, foreign_key: true, null: false
       t.references :match, foreign_key: true, null: false
       t.integer :vp
+      #elo data is from before change
       t.integer :elo_general
       t.integer :elo_general_change
       t.integer :elo_free

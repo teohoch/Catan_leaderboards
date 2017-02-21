@@ -28,21 +28,23 @@
 <table class="display table table-condensed table-responsive">
   <thead>
   <th><%= User.human_attribute_name(:name) %> </th>
-  <th><%= User.human_attribute_name(:email) %></th>
-  <th><%= User.human_attribute_name(:position_general) %></th>
-  <th><%= User.human_attribute_name(:position_tournament) %></th>
-  <th><%= User.human_attribute_name(:position_free) %></th>
-  <th><%= User.human_attribute_name(:matches_played) %></th>
+  <th><%= UserMatch.human_attribute_name(:victory_position) %></th>
+  <th class="center_element"><%= UserMatch.human_attribute_name(:vp) %></th>
+  <th class="center_element"><%= User.human_attribute_name(:position_general) %></th>
+  <th class="center_element"><%= User.human_attribute_name(:position_tournament) %></th>
+  <th class="center_element"><%= User.human_attribute_name(:position_free) %></th>
+  <th class="center_element"><%= User.human_attribute_name(:matches_played) %></th>
   </thead>
   <tbody>
   <% @users.each do |user| %>
       <tr>
         <td><%= user.name %></td>
-        <td><%= user.email %></td>
-        <td><%= user.position_general %></td>
-        <td><%= user.position_tournament %></td>
-        <td><%= user.position_free %></td>
-        <td><%= user.matches_played %></td>
+        <td><%= victory_position_human(user.victory_position) %></td>
+        <td align="center"><%= user.vp %></td>
+        <td align="center"><%= user.position_general %></td>
+        <td align="center"><%= user.position_tournament %></td>
+        <td align="center"><%= user.position_free %></td>
+        <td align="center"><%= user.matches_played %></td>
       </tr>
   <% end %>
   </tbody>

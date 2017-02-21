@@ -5,13 +5,19 @@
       <%= f.input :date, as: :string, input_html: {class: "datepicker", readonly: "readonly", data: {minDate: Date.current}} %>
       <%= f.input :location %>
       <div class="row">
-        <div class="col-md-3">
           <%= f.simple_fields_for :user_matches do |m| %>
+            <div class="col-md-3">
               <%= m.association :user, :disabled => true, input_html: {data: {max_users: User.all.count, error_message: (t "activerecord.errors.models.match.attributes.n_players.inclusion")}} %>
-              <%= m.hidden_field :user_id %>
+            </div>
+
+            <div class="col-md-2">
+              <%= m.input :vp, as: :integer, input_html: {min: 1, step: 1, max: 10, value: 1} %>
+            </div>
+
+
+            <%= m.hidden_field :user_id %>
               <%= m.hidden_field :validated, value: true %>
           <% end %>
-        </div>
       </div>
 
       <%= link_to_add_fields "Agregar Jugador", f, :user_matches, FALSE, "add_purchase_item" %>

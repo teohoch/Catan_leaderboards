@@ -2,7 +2,7 @@ class Match < ApplicationRecord
   has_many :user_matches, dependent: :destroy
   has_many :users, through: :user_matches
   accepts_nested_attributes_for :user_matches
-  validates_presence_of :date, :location
+
 
   def validated_human
     if self.validated
@@ -46,7 +46,7 @@ class Match < ApplicationRecord
     end
   end
 
-  def self.new_with_child(match_params)
+  def self.new_with_child(match_params, tournament=false)
     @match = Match.new(:date => match_params[:date], :location => match_params[:location])
     success = true
     error_list = []
@@ -60,11 +60,11 @@ class Match < ApplicationRecord
         elems_array.push(a)
       end
 
-      elems_array.sort_by! { |k| k.vp.nil? ? -1 : k.vp }.reverse!
-      counter = 1
+      unless tournament
+        elems_array = set_victory_positions(elems_array)
+      end
+
       elems_array.each do |elem|
-        elem.victory_position = counter
-        counter = counter + 1
         unless elem.save
           error_list.push(elem.errors)
           success = false
@@ -81,6 +81,16 @@ class Match < ApplicationRecord
     end
 
     {:state => success, :errors => error_list, :object => (success ? @match : nil)}
+  end
+
+  def self.set_victory_positions(elems_array)
+    elems_array.sort_by! { |k| k.vp.nil? ? -1 : k.vp }.reverse!
+    counter = 1
+    elems_array.each do |elem|
+      elem.victory_position = counter
+      counter = counter + 1
+    end
+    elems_array
   end
 
   def self.set_rankings(user_matches, general=false, tournament=false)

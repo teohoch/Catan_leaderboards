@@ -43,6 +43,7 @@ es:
       update_needs_confirmation: "Actualizo su cuenta correctamente, pero tenemos que revalidar su email. Revise su correo para confirmar la dirección."
       updated: "Actualizo su cuenta correctamente."
     sessions:
+      sign_in: ""
       signed_in: "Inicio sesión correctamente."
       signed_out: "Cerro sesión correctamente."
       already_signed_out: "Se cerró sesión correctamente."

@@ -2,7 +2,12 @@ Rails.application.routes.draw do
 
   resources :user_matches
   authenticate :user do
-    resources :tournaments, only: [:new, :create, :edit, :update, :destroy]
+    resources :tournaments, only: [:new, :create, :edit, :update, :destroy] do
+      member do
+        post :start
+        post :end
+      end
+    end
     resources :matches, only: [:new, :create, :edit, :update, :destroy]
   end
   resources :tournaments, only: [:index, :show]

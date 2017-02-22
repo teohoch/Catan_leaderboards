@@ -20,19 +20,19 @@ fuser2 = User.new(:email => "teodoro.hochfarber@gmail.com",
 
 fuser2.save
 
-fuser3 = User.new(:email => "testing@test.com",
-                  :name => "testin1",
-                  :password => 'password',
-                  :password_confirmation => 'password')
+users = [fuser, fuser2]
 
-fuser3.save
+10.times do
+  fuser3 = User.new(:email => Faker::Internet.email,
+                    :name => Faker::Name.name,
+                    :password => 'password',
+                    :password_confirmation => 'password')
 
-fuser4 = User.new(:email => "testing2@test.com",
-                  :name => "testin2",
-                  :password => 'password',
-                  :password_confirmation => 'password')
+  fuser3.save
+  users.push(fuser3)
+end
 
-fuser4.save
+
 
 tournament1 = Tournament.new(
     :name => "Torneo1",
@@ -43,8 +43,15 @@ tournament1 = Tournament.new(
     :date => Date.tomorrow,
     :rounds => 2,
     :mode => 0)
-
 tournament1.save
+
+aval_users = users.dup.to_a
+
+8.times do
+  user = aval_users.slice!(rand(aval_users.count))
+  inscription = Inscription.new({:user_id => user[:id], :tournament_id => tournament1.id})
+  inscription.save
+end
 
 tournament2 = Tournament.new(
     :name => "Torneo2",
@@ -58,7 +65,16 @@ tournament2 = Tournament.new(
 
 tournament2.save
 
-5.times do
+aval_users = users.dup.to_a
+
+9.times do
+  user = aval_users.slice!(rand(aval_users.count))
+  inscription = Inscription.new({:user_id => user[:id], :tournament_id => tournament2.id})
+  inscription.save
+end
+
+
+1.times do
   Match.new_with_child(:date => Faker::Date.between(Date.today, 1.month.from_now),
                        :location => Faker::Address.city,
                        :user_matches_attributes => {

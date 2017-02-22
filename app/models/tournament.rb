@@ -1,6 +1,7 @@
 class Tournament < ApplicationRecord
   belongs_to :user
   has_many :inscriptions
+  has_many :users, through: :inscriptions
   attr_accessor :general_mode
 
   validates_presence_of :name, :number_players, :prize, :entrance_fee, :user_id, :date, :rounds, :mode

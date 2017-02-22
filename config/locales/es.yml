@@ -42,6 +42,8 @@ es:
   fith:   "Quinto Lugar"
   sixth:  "Sexto Lugar"
 
+  start: "Iniciar"
+  end: "Finalizar"
 
 
   activerecord:
@@ -140,6 +142,9 @@ es:
         create: "Crear Torneo"
       match:
         create: "Crear Partida"
+      user:
+        submit: "Iniciar Sesión"
+        create: "Registrar nuevo Usuario"
 
   date:
       order:

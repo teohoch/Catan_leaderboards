@@ -21,8 +21,9 @@ ActiveRecord::Schema.define(version: 20170216021751) do
     t.integer  "present_position"
     t.integer  "present_round"
     t.integer  "score"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.boolean "officer", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["tournament_id"], name: "index_inscriptions_on_tournament_id", using: :btree
     t.index ["user_id"], name: "index_inscriptions_on_user_id", using: :btree
   end

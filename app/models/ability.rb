@@ -34,12 +34,14 @@ class Ability
     can :create, Tournament
     can :update, Tournament, :user_id => user.id
     can :destroy, Tournament, :user_id => user.id
+    can :start, Tournament, :user_id => user.id, :status => 0
+    can :end, Tournament, :user_id => user.id, :status => 1
 
     can :read, Match
     can :create, Match
     can :update, Match do |match|
       result = false
-      if not match.validated
+      unless match.validated
         match.users.each do |us|
           if us.id == user.id
             result = true
@@ -48,9 +50,10 @@ class Ability
       end
       result
     end
+
     can :destroy, Match do |match|
       result = false
-      if not match.validated
+      unless match.validated
         match.users.each do |us|
           if us.id == user.id
             result = true

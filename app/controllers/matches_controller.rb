@@ -32,7 +32,6 @@ class MatchesController < ApplicationController
   # POST /matches.json
   def create
     success = Match.new_with_child(match_params)
-
     respond_to do |format|
       if success[:state]
         format.html { redirect_to success[:object], notice: 'Match was successfully created.' }

@@ -45,6 +45,12 @@ es:
   start: "Iniciar"
   end: "Finalizar"
 
+  ended_f: "Finalizada"
+  ended_m: "Finalizado"
+  waiting: "En espera"
+
+  match_blank_error: "Los datos de la partida no pueden estar en blanco."
+
 
   activerecord:
       models:
@@ -128,8 +134,10 @@ es:
                 inclusion: "La partida debe tener por lo menos 3 jugadores y a lo mas 6."
               date:
                 blank: "La fecha no puede estar en blanco."
+                client_presence: "La fecha no puede estar en blanco."
               location:
                 blank: "La ubicacion no puede estar en blanco."
+                client_presence: "La ubicacion no puede estar en blanco."
 
 
   unauthorized:
@@ -142,6 +150,7 @@ es:
         create: "Crear Torneo"
       match:
         create: "Crear Partida"
+        update: "Actualizar Partida"
       user:
         submit: "Iniciar Sesión"
         create: "Registrar nuevo Usuario"

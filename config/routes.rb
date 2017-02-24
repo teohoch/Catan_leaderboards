@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :user_matches
+  resources :user_matches, only: [:index, :update, :destroy]
   authenticate :user do
     resources :tournaments, only: [:new, :create, :edit, :update, :destroy] do
       member do

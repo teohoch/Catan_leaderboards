@@ -10,6 +10,8 @@ class CreateTournaments < ActiveRecord::Migration[5.0]
       t.integer :board_size, null: false, default: 4
       t.integer :mode, null: false, default: 0
       t.integer :rounds
+      t.integer :current_round, default: 0
+      t.boolean :must_end_round, null: false, default: true
       t.integer :registered, null: false, default: 0
 
       t.references :user, foreign_key: true

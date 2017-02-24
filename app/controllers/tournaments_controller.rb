@@ -11,12 +11,11 @@ class TournamentsController < ApplicationController
   # GET /tournaments/1
   # GET /tournaments/1.json
   def show
-    a = (@tournament.inscriptions.find_by(:user_id => current_user.id).nil? and @tournament[:status]==0)
-    @registrable = current_user.nil? ? false : a
+    @registrable = current_user.nil? ? false : (@tournament.inscriptions.find_by(:user_id => current_user.id).nil? and @tournament[:status]==0)
     if @registrable
       @inscription = Inscription.new(:tournament_id=> @tournament.id)
     else
-      @inscription = @tournament.inscriptions.find_by(:user_id => current_user.id)
+      @inscription = current_user.nil? ? false : @tournament.inscriptions.find_by(:user_id => current_user.id)
     end
   end
 
@@ -100,6 +99,7 @@ class TournamentsController < ApplicationController
           match_parameters = {
               :n_players => match.count,
               :round => round_number,
+              :tournament_id => @tournament[:id],
               :user_matches_attributes => user_attributes
           }
           new_match = Match.new_with_child(match_parameters, true)
@@ -109,8 +109,10 @@ class TournamentsController < ApplicationController
         end
       end
     end
+    # TODO Add Start for pyramidal tournament
     if success
       @tournament.status=1
+      @tournament.current_round = 1
       @tournament.save
     end
     respond_to do |format|

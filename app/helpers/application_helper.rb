@@ -17,7 +17,7 @@ module ApplicationHelper
       end
     end
     html = rendered.join.squish
-    return html.html_safe
+    html.html_safe
   end
 
   def bootstrap_class_for flash_type
@@ -37,6 +37,15 @@ module ApplicationHelper
     end
     link_to(name, '#', class: "add_fields btn btn-default", data: {id: id, fields: fields.gsub("\n", "")}, style: "display: #{hidden ? "none" : "visible"}; margin-left: 0px", id: element_id)
   end
+
+  def back_or_default(default = root_url)
+    if request.env["HTTP_REFERER"].present? and request.env["HTTP_REFERER"] != request.env["REQUEST_URI"]
+      :back
+    else
+      default
+    end
+  end
+
 
   def datatable_language
     if I18n.exists?("table_text.sInfoFiltered")

@@ -2,8 +2,8 @@
     <%= f.error_notification %>
 
     <div class="form-inputs">
-      <%= f.input :date, as: :string, validate: {presence: true}, input_html: {class: "datepicker", readonly: "readonly", data: {minDate: Date.current}} %>
-      <%= f.input :location, validate: {presence: true} %>
+      <%= f.input :date, as: :string, input_html: {class: "datepicker", readonly: "readonly", data: {minDate: Date.current}} %>
+      <%= f.input :location %>
       <div class="row">
           <%= f.simple_fields_for :user_matches do |m| %>
             <div class="col-md-3">
@@ -20,7 +20,7 @@
           <% end %>
       </div>
 
-      <%= link_to_add_fields "Agregar Jugador", f, :user_matches, true, "add_purchase_item" %>
+      <%= link_to_add_fields "Agregar Jugador", f, :user_matches, FALSE, "add_purchase_item" %>
     </div>
     <br>
 

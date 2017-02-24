@@ -58,7 +58,7 @@
         <%= link_to (t 'edit'), edit_match_path(@match), class: "btn btn-info" %>
       </div>
   <% end %>
-  <% if not @match.validated and not @user_match.validated %>
+  <% if can? :validate, @match %>
       <div class="col-md-2 center-block">
         <%= simple_form_for(@user_match) do |f| %>
             <%= f.input :validated, as: :hidden, :input_html => {:value => true} %>
@@ -67,7 +67,7 @@
       </div>
   <% end %>
   <div class="col-md-1">
-    <%= link_to (t 'back'), matches_path, class: "btn btn-danger" %>
+    <%= link_to (t 'back'), back_or_default(matches_path), class: "btn btn-danger" %>
   </div>
 
 

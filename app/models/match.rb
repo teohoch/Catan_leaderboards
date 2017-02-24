@@ -1,7 +1,10 @@
 class Match < ApplicationRecord
+  include ActiveModel::Validations
   has_many :user_matches, dependent: :destroy
   has_many :users, through: :user_matches
+  belongs_to :tournament
   accepts_nested_attributes_for :user_matches
+  validates :date, :location, client_presence: true
 
 
   def validated_human
@@ -12,6 +15,11 @@ class Match < ApplicationRecord
     end
   end
 
+  def status
+    self.validated ? (I18n.t :ended_f) : (I18n.t :waiting)
+  end
+
+
   def validated_count
     self.user_matches.where(:validated => true).count
   end
@@ -21,6 +29,9 @@ class Match < ApplicationRecord
       self.update(validated: true)
       not self.tournament_id.nil?
       user_matches = Match.set_rankings(self.user_matches, (self.tournament_id.nil?), (not self.tournament_id.nil?))
+
+      user_matches = Match.set_victory_positions(user_matches)
+
       user_matches.sort_by! { |k| k.user_id }
       self.users.order(:id).zip user_matches.each do |user, ranking|
         user.increment(:matches_played)
@@ -47,7 +58,10 @@ class Match < ApplicationRecord
   end
 
   def self.new_with_child(match_params, tournament=false)
-    @match = Match.new(:date => match_params[:date], :location => match_params[:location])
+    @match = Match.new(:date => match_params[:date],
+                       :location => match_params[:location],
+                       :tournament_id => match_params[:tournament_id],
+                       :round => match_params[:round])
     success = true
     error_list = []
     if @match.save
@@ -59,11 +73,6 @@ class Match < ApplicationRecord
                           :validated => elem.key?(:validated) ? elem[:validated] : false)
         elems_array.push(a)
       end
-
-      unless tournament
-        elems_array = set_victory_positions(elems_array)
-      end
-
       elems_array.each do |elem|
         unless elem.save
           error_list.push(elem.errors)
@@ -135,3 +144,5 @@ class Match < ApplicationRecord
 
 
 end
+
+

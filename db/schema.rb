@@ -42,19 +42,21 @@ ActiveRecord::Schema.define(version: 20170216021751) do
   end
 
   create_table "tournaments", force: :cascade do |t|
-    t.string   "name",                       null: false
-    t.integer  "number_players",             null: false
-    t.string   "prize",                      null: false
-    t.integer  "entrance_fee",               null: false
-    t.date     "date",                       null: false
-    t.integer  "status",         default: 0, null: false
-    t.integer  "board_size",     default: 4, null: false
-    t.integer  "mode",           default: 0, null: false
+    t.string "name", null: false
+    t.integer "number_players", null: false
+    t.string "prize", null: false
+    t.integer "entrance_fee", null: false
+    t.date "date", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "board_size", default: 4, null: false
+    t.integer "mode", default: 0, null: false
     t.integer  "rounds"
-    t.integer  "registered",     default: 0, null: false
+    t.integer "current_round", default: 0
+    t.boolean "must_end_round", default: true, null: false
+    t.integer "registered", default: 0, null: false
     t.integer  "user_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_tournaments_on_user_id", using: :btree
   end
 

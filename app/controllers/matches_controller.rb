@@ -14,9 +14,11 @@ class MatchesController < ApplicationController
   # GET /matches/1
   # GET /matches/1.json
   def show
-    @user_match = UserMatch.find_by(user_id: current_user.id, match_id: @match.id)
     @users = User.joins(:user_matches).select(
-        "users.*, user_matches.vp, user_matches.victory_position").where("user_matches.match_id" => @match.id)
+        'users.*, user_matches.vp, user_matches.victory_position').where('user_matches.match_id' => @match.id)
+    if can? :validate, @match
+      @user_match = @match.user_matches.find_by(:user_id => current_user.id)
+    end
   end
 
   # GET /matches/new
@@ -26,6 +28,7 @@ class MatchesController < ApplicationController
 
   # GET /matches/1/edit
   def edit
+    @user_matches = @match.user_matches
   end
 
   # POST /matches
@@ -47,8 +50,14 @@ class MatchesController < ApplicationController
   # PATCH/PUT /matches/1
   # PATCH/PUT /matches/1.json
   def update
+    success = @match.update(match_params)
+    if success
+      @match.user_matches.each do |user_match|
+        user_match.user_id == current_user.id ? user_match.update(:validated => false) : user_match.update(:validated => true)
+      end
+    end
     respond_to do |format|
-      if @match.update(match_params)
+      if success
         format.html { redirect_to @match, notice: 'Match was successfully updated.' }
         format.json { render :show, status: :ok, location: @match }
       else
@@ -76,6 +85,6 @@ class MatchesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def match_params
-    params.require(:match).permit(:n_players, :round, :pyramidal_position, :date, :location, user_matches_attributes: [:user_id, :validated, :vp, :_destroy])
+    params.require(:match).permit(:n_players, :round, :pyramidal_position, :date, :location, user_matches_attributes: [:id, :user_id, :validated, :vp, :_destroy])
   end
 end

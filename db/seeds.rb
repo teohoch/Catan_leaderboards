@@ -53,6 +53,25 @@ aval_users = users.dup.to_a
   inscription.save
 end
 
+tournament3 = Tournament.new(
+    :name => "Torneo1",
+    :user_id => fuser.id,
+    :number_players => 9,
+    :prize => Faker::StarWars.vehicle,
+    :entrance_fee => 10500,
+    :date => Date.tomorrow,
+    :rounds => 2,
+    :mode => 0)
+tournament3.save
+
+aval_users = users.dup.to_a
+
+9.times do
+  user = aval_users.slice!(rand(aval_users.count))
+  inscription = Inscription.new({:user_id => user[:id], :tournament_id => tournament3.id})
+  inscription.save
+end
+
 tournament2 = Tournament.new(
     :name => "Torneo2",
     :user_id => fuser.id,

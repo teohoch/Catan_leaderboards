@@ -50,7 +50,6 @@ class Ability
       end
       result
     end
-
     can :destroy, Match do |match|
       result = false
       unless match.validated
@@ -61,6 +60,26 @@ class Ability
         end
       end
       result
+    end
+    can :validate, Match do |match|
+      participant = match.user_matches.find_by(:user_id => user.id)
+      local_validated = false
+      if participant
+        local_validated = participant.validated
+      end
+      composition = true
+      match.user_matches.each do |user_match|
+        if user_match.vp.nil?
+          composition = false
+        end
+      end
+
+      tournament_round = true
+      unless match.tournament_id.nil? or not match.tournament.must_end_round
+        tournament_round = (match.tournament.current_round==match.round)
+      end
+      # TODO Revise these conditions
+      (!participant.nil? and not local_validated and not match[:validated] and tournament_round and composition)
     end
   end
 end

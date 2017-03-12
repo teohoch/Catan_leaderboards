@@ -53,7 +53,7 @@ class MatchesController < ApplicationController
     success = @match.update(match_params)
     if success
       @match.user_matches.each do |user_match|
-        user_match.user_id == current_user.id ? user_match.update(:validated => false) : user_match.update(:validated => true)
+        (user_match.user_id == current_user.id) ? user_match.update(:validated => true) : user_match.update(:validated => false)
       end
     end
     respond_to do |format|

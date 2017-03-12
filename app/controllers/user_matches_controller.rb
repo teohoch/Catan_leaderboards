@@ -11,7 +11,7 @@ class UserMatchesController < ApplicationController
   # PATCH/PUT /user_matches/1.json
   def update
     respond_to do |format|
-      if not @user_match.vp.nil? && @user_match.update(user_match_params)
+      if not @user_match.vp.nil? and @user_match.update(user_match_params)
         @user_match.match.validate_match
         format.html { redirect_to back_or_default, notice: 'User match was successfully updated.' }
         format.json { render :show, status: :ok, location: @user_match }

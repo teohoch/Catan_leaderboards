@@ -39,8 +39,8 @@ class Match < ApplicationRecord
           ranking[:elo_general] = user[:elo_general]
           user.increment(:elo_general, ranking[:elo_general_change])
         else
-          ranking[:elo_general] = user[:elo_general]
-          user.increment(:elo_general, ranking[:elo_general_change])
+          ranking[:elo_tournament] = user[:elo_tournament]
+          user.increment(:elo_tournament, ranking[:elo_tournament_change])
         end
         ranking[:elo_free] = user[:elo_free]
         user.increment(:elo_free, ranking[:elo_free_change])
@@ -108,6 +108,7 @@ class Match < ApplicationRecord
     attributes_tournament = []
     winner = true
     user_matches_ordered = user_matches.sort_by { |k| k.vp.nil? ? -1 : k.vp }.reverse!
+
     user_matches_ordered.each do |elem|
       elem_user = User.find(elem[:user_id])
       general ? attributes_general.push({:rating => elem_user.elo_general, :winner => winner, :provisional => (elem_user.matches_played<=2)}) : nil

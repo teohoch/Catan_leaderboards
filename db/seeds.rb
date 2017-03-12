@@ -23,13 +23,15 @@ fuser2.save
 users = [fuser, fuser2]
 
 10.times do
+=begin
   fuser3 = User.new(:email => Faker::Internet.email,
                     :name => Faker::Name.name,
                     :password => 'password',
                     :password_confirmation => 'password')
 
   fuser3.save
-  users.push(fuser3)
+=end
+  users.push(FactoryGirl.create(:user))
 end
 
 

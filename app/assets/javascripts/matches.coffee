@@ -3,15 +3,18 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 jQuery ->
-  user_counter = 1
+  user_counter = $("#inputs").data("current-users")
+  not_tournament = $("#inputs").data("not-tournament")
   used_user_field_ids = []
   used_user_ids = []
   max = 6
   min = 3
-  max_users = $("#match_user_matches_attributes_0_user_id").data("max-users")
-  error_message_user_count = $("#match_user_matches_attributes_0_user_id").data("error-message")
+  max_users = $("#inputs").data("max-users")
+  error_message_user_count = $("#inputs").data("error-message")
   last_id_used = null
   used_user_ids.push($("#match_user_matches_attributes_0_user_id").val())
+  if not_tournament and max_users >= 3
+    $("#add_purchase_item").show()
 
   if max_users >= 3
     $("#add_purchase_item").show()
@@ -77,9 +80,6 @@ jQuery ->
         last_id_used = id
         $("#match_user_matches_attributes_" + id + "_user_id").prop("disabled", false)
         $("#match_user_matches_attributes_" + id + "_vp").prop("disabled", false)
-
-
-
       else
         last_id_used = null
 

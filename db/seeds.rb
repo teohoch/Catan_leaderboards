@@ -20,19 +20,21 @@ fuser2 = User.new(:email => "teodoro.hochfarber@gmail.com",
 
 fuser2.save
 
-fuser3 = User.new(:email => "testing@test.com",
-                  :name => "testin1",
-                  :password => 'password',
-                  :password_confirmation => 'password')
+users = [fuser, fuser2]
 
-fuser3.save
+10.times do
+=begin
+  fuser3 = User.new(:email => Faker::Internet.email,
+                    :name => Faker::Name.name,
+                    :password => 'password',
+                    :password_confirmation => 'password')
 
-fuser4 = User.new(:email => "testing2@test.com",
-                  :name => "testin2",
-                  :password => 'password',
-                  :password_confirmation => 'password')
+  fuser3.save
+=end
+  users.push(FactoryGirl.create(:user))
+end
 
-fuser4.save
+
 
 tournament1 = Tournament.new(
     :name => "Torneo1",
@@ -43,8 +45,34 @@ tournament1 = Tournament.new(
     :date => Date.tomorrow,
     :rounds => 2,
     :mode => 0)
-
 tournament1.save
+
+aval_users = users.dup.to_a
+
+8.times do
+  user = aval_users.slice!(rand(aval_users.count))
+  inscription = Inscription.new({:user_id => user[:id], :tournament_id => tournament1.id})
+  inscription.save
+end
+
+tournament3 = Tournament.new(
+    :name => "Torneo1",
+    :user_id => fuser.id,
+    :number_players => 9,
+    :prize => Faker::StarWars.vehicle,
+    :entrance_fee => 10500,
+    :date => Date.tomorrow,
+    :rounds => 2,
+    :mode => 0)
+tournament3.save
+
+aval_users = users.dup.to_a
+
+9.times do
+  user = aval_users.slice!(rand(aval_users.count))
+  inscription = Inscription.new({:user_id => user[:id], :tournament_id => tournament3.id})
+  inscription.save
+end
 
 tournament2 = Tournament.new(
     :name => "Torneo2",
@@ -57,6 +85,15 @@ tournament2 = Tournament.new(
     :mode => 2)
 
 tournament2.save
+
+aval_users = users.dup.to_a
+
+9.times do
+  user = aval_users.slice!(rand(aval_users.count))
+  inscription = Inscription.new({:user_id => user[:id], :tournament_id => tournament2.id})
+  inscription.save
+end
+
 
 5.times do
   Match.new_with_child(:date => Faker::Date.between(Date.today, 1.month.from_now),

@@ -26,8 +26,8 @@
               <%= f.input :email, as: :email, label: false,  placeholder: "Usuario"  %>
               <%= f.input :password, as: :password, label: false,  placeholder: "Contraseña"%>
               <%= f.input :remember_me, as: :boolean, inline_label: "¿Recordarme?" %>
-              <%= f.button :submit, 'Iniciar Sesion' %>
-              <%= link_to "¿Olvido su contraseña?", new_password_path(:user) %>
+              <%= f.button :submit %>
+              <%= link_to (t :sign_up), new_registration_path(:user) %>
           <% end %>
       <% end %>
 

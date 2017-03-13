@@ -4,10 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :tournaments
   has_many :inscriptions
   has_many :user_matches
   has_many :matches, through: :user_matches
+
 
   NEWBIE_THRESHOLD = 2
 

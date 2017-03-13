@@ -1,5 +1,5 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: [:show, :edit, :update, :destroy]
+  before_action :set_tournament, only: [:show, :edit, :update, :destroy, :start]
   load_and_authorize_resource
 
   # GET /tournaments
@@ -11,11 +11,11 @@ class TournamentsController < ApplicationController
   # GET /tournaments/1
   # GET /tournaments/1.json
   def show
-    @registered = (!@tournament.inscriptions.find_by(:user_id => current_user.id).nil?)
-    if not @registered
+    @registrable = current_user.nil? ? false : (@tournament.inscriptions.find_by(:user_id => current_user.id).nil? and @tournament[:status]==0)
+    if @registrable
       @inscription = Inscription.new(:tournament_id=> @tournament.id)
     else
-      @inscription = @tournament.inscriptions.find_by(:user_id => current_user.id)
+      @inscription = current_user.nil? ? false : @tournament.inscriptions.find_by(:user_id => current_user.id)
     end
   end
 
@@ -40,7 +40,7 @@ class TournamentsController < ApplicationController
         :board_size => tournament_params[:board_size],
         :user_id => current_user.id
     )
-    if(tournament_params[:general_mode]=="0")
+    if tournament_params[:general_mode]=="0"
       @tournament.rounds = tournament_params[:rounds]
       @tournament.mode = 0
     else
@@ -80,6 +80,52 @@ class TournamentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to tournaments_url, notice: ([Tournament.model_name.human, (t "succesfully_destroyed")].join(" ")) }
       format.json { head :no_content }
+    end
+  end
+
+  def start
+    success = true
+    errors = []
+    if @tournament.mode ==0
+      selector = RoundSelector.new(@tournament.rounds, @tournament.users.to_a, @tournament.board_size)
+      round_matches = selector.select_all_rounds
+      round_matches.zip (1..round_matches.count).each do |round, round_number|
+        round.each do |match|
+          user_attributes = {}
+          match.each do |user|
+            user_attributes[user[:id]] = {:user_id => user[:id]}
+          end
+
+          match_parameters = {
+              :n_players => match.count,
+              :round => round_number,
+              :tournament_id => @tournament[:id],
+              :user_matches_attributes => user_attributes
+          }
+          new_match = Match.new_with_child(match_parameters, true)
+          unless new_match[:success]
+            errors.push(new_match[:errors])
+          end
+        end
+      end
+    end
+    # TODO Add Start for pyramidal tournament
+    if success
+      @tournament.status=1
+      @tournament.current_round = 1
+      @tournament.save
+    end
+    respond_to do |format|
+      if success
+        format.html { redirect_to @tournament, notice: 'Tournament was successfully started.' }
+        format.json { render :show, status: :created, location: @tournament }
+      else
+        errors.each do |error|
+          flash_message(:error, error)
+        end
+        format.html { redirect_to @tournament }
+        format.json { render json: error, status: :unprocessable_entity }
+      end
     end
   end
 

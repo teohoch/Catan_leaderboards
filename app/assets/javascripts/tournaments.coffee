@@ -9,7 +9,7 @@ jQuery ->
   $('#tournaments').dataTable(
     {
       "language": language,"jQueryUI": true
-    });
+    })
 
   ranking_setter = (parent) ->
     parent.next().before ($("#general_mode").data("ranking"))

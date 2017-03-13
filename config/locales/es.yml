@@ -42,6 +42,14 @@ es:
   fith:   "Quinto Lugar"
   sixth:  "Sexto Lugar"
 
+  start: "Iniciar"
+  end: "Finalizar"
+
+  ended_f: "Finalizada"
+  ended_m: "Finalizado"
+  waiting: "En espera"
+
+  match_blank_error: "Los datos de la partida no pueden estar en blanco."
 
 
   activerecord:
@@ -92,6 +100,7 @@ es:
           vp: "Puntos de Victoria"
 
 
+
       errors:
         models:
           tournament:
@@ -126,9 +135,15 @@ es:
                 inclusion: "La partida debe tener por lo menos 3 jugadores y a lo mas 6."
               date:
                 blank: "La fecha no puede estar en blanco."
+                client_presence: "La fecha no puede estar en blanco."
               location:
                 blank: "La ubicacion no puede estar en blanco."
-
+                client_presence: "La ubicacion no puede estar en blanco."
+        messages:
+                record_invalid: "La validación falló: %{errors}"
+                restrict_dependent_destroy:
+                  has_one: No se puede eliminar el registro porque existe un %{record} dependiente
+                  has_many: No se puede eliminar el registro porque existen %{record} dependientes
 
   unauthorized:
       update:
@@ -140,6 +155,10 @@ es:
         create: "Crear Torneo"
       match:
         create: "Crear Partida"
+        update: "Actualizar Partida"
+      user:
+        submit: "Iniciar Sesión"
+        create: "Registrar nuevo Usuario"
 
   date:
       order:
@@ -181,3 +200,11 @@ es:
       sPrevious:       "Anterior"
       sSortAscending:  ": Activar para ordenar la columna de manera ascendente"
       sSortDescending: ": Activar para ordenar la columna de manera descendente"
+  match:
+    update:
+      success: "Partida actualizada correctamente."
+    validate:
+      success: "Partida validada correctamente."
+  user_match:
+    update:
+      success: "Relacion Usuario/Partida actualizada correctamente."

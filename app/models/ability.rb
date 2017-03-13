@@ -34,12 +34,14 @@ class Ability
     can :create, Tournament
     can :update, Tournament, :user_id => user.id
     can :destroy, Tournament, :user_id => user.id
+    can :start, Tournament, :user_id => user.id, :status => 0
+    can :end, Tournament, :user_id => user.id, :status => 1
 
     can :read, Match
     can :create, Match
     can :update, Match do |match|
       result = false
-      if not match.validated
+      unless match.validated
         match.users.each do |us|
           if us.id == user.id
             result = true
@@ -50,7 +52,7 @@ class Ability
     end
     can :destroy, Match do |match|
       result = false
-      if not match.validated
+      unless match.validated
         match.users.each do |us|
           if us.id == user.id
             result = true
@@ -58,6 +60,26 @@ class Ability
         end
       end
       result
+    end
+    can :validate, Match do |match|
+      participant = match.user_matches.find_by(:user_id => user.id)
+      local_validated = false
+      if participant
+        local_validated = participant.validated
+      end
+      composition = true
+      match.user_matches.each do |user_match|
+        if user_match.vp.nil?
+          composition = false
+        end
+      end
+
+      tournament_round = true
+      unless match.tournament_id.nil? or not match.tournament.must_end_round
+        tournament_round = (match.tournament.current_round==match.round)
+      end
+      # TODO Revise these conditions
+      (not participant.nil? and not local_validated and not match[:validated] and tournament_round and composition)
     end
   end
 end

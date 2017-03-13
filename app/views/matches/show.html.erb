@@ -5,7 +5,7 @@
   </thead>
   <tbody>
   <% @match.attributes.each do |attribute_name, attribute_value| %>
-      <% if not ["id", "created_at", "updated_at", "round", "pyramidal_position"].include? attribute_name %>
+      <% unless ["id", "created_at", "updated_at", "round", "pyramidal_position"].include? attribute_name %>
           <tr>
             <% if attribute_name == "tournament_id" %>
                 <% if attribute_value != nil %>
@@ -60,8 +60,7 @@
   <% end %>
   <% if can? :validate, @match %>
       <div class="col-md-2 center-block">
-        <%= simple_form_for(@user_match) do |f| %>
-            <%= f.input :validated, as: :hidden, :input_html => {:value => true} %>
+        <%= simple_form_for @match, url: validate_match_path(@match), method: :patch do |f| %>
             <%= f.button :submit_tag, (t "validate"), :class => "btn btn-success" %>
         <% end %>
       </div>

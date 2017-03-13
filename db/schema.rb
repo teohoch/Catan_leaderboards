@@ -65,11 +65,11 @@ ActiveRecord::Schema.define(version: 20170216021751) do
     t.integer  "match_id",                              null: false
     t.integer  "vp"
     t.integer  "elo_general"
-    t.integer  "elo_general_change"
+    t.integer "elo_general_change", default: 0, null: false
     t.integer  "elo_free"
-    t.integer  "elo_free_change"
+    t.integer "elo_free_change", default: 0, null: false
     t.integer  "elo_tournament"
-    t.integer  "elo_tournament_change"
+    t.integer "elo_tournament_change", default: 0, null: false
     t.integer  "tournament_point"
     t.integer  "victory_position"
     t.boolean  "validated",             default: false, null: false

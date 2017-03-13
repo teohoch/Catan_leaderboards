@@ -1,5 +1,5 @@
 class MatchesController < ApplicationController
-  before_action :set_match, only: [:show, :edit, :update, :destroy]
+  before_action :set_match, only: [:show, :edit, :update, :destroy, :validate]
   load_and_authorize_resource
 
   # GET /matches
@@ -58,7 +58,7 @@ class MatchesController < ApplicationController
     end
     respond_to do |format|
       if success
-        format.html { redirect_to @match, notice: 'Match was successfully updated.' }
+        format.html { redirect_to @match, notice: t('match.validate.success') }
         format.json { render :show, status: :ok, location: @match }
       else
         format.html { render :edit }
@@ -66,6 +66,19 @@ class MatchesController < ApplicationController
       end
     end
   end
+
+  def validate
+    respond_to do |format|
+      if @match.user_validation
+        format.html { redirect_to back_or_default, notice: t('match.validate.success') }
+        format.json { render :show, status: :ok, location: @match }
+      else
+        format.html { redirect_to back_or_default }
+        format.json { render json: @user_match.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
 
   # DELETE /matches/1
   # DELETE /matches/1.json

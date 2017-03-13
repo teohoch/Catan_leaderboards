@@ -24,36 +24,89 @@ class Match < ApplicationRecord
     self.user_matches.where(:validated => true).count
   end
 
-  def validate_match
+  def user_validation
+    current_user_match = @match.user_matches.find_by_user_id(current_user.id)
+    success = (not current_user_match.nil?)
+    if success && current_user_match.update(:validated => true)
+      @match.validate
+    end
+    success
+  end
+
+  def validate
     if not self.validated and self.validated_count >= 2
       self.update(validated: true)
-      not self.tournament_id.nil?
-      user_matches = Match.set_rankings(self.user_matches, (self.tournament_id.nil?), (not self.tournament_id.nil?))
 
-      user_matches = Match.set_victory_positions(user_matches)
+      self.set_rankings
+      self.set_victory_positions
 
-      user_matches.sort_by! { |k| k.user_id }
-      self.users.order(:id).zip user_matches.each do |user, ranking|
+      self.user_matches.each do |user_match|
+        user = user_match.user
+        user_match.update(:elo_general => user.elo_general, :elo_tournament => user.elo_tournament, :elo_free => user.elo_free)
         user.increment(:matches_played)
-        if self.tournament_id.nil?
-          ranking[:elo_general] = user[:elo_general]
-          user.increment(:elo_general, ranking[:elo_general_change])
-        else
-          ranking[:elo_tournament] = user[:elo_tournament]
-          user.increment(:elo_tournament, ranking[:elo_tournament_change])
-        end
-        ranking[:elo_free] = user[:elo_free]
-        user.increment(:elo_free, ranking[:elo_free_change])
+        user.increment(:elo_general, user_match[:elo_general_change])
+        user.increment(:elo_tournament, user_match[:elo_tournament_change])
+        user.increment(:elo_free, user_match[:elo_free_change])
 
-        ranking.save
         user.save
       end
+
       if self.tournament_id.nil?
         User.update_position_general
       else
         User.update_position_tournament
       end
       User.update_position_free
+    end
+  end
+
+  def set_victory_positions()
+    user_matches = self.user_matches.order(vp: :desc)
+    user_matches.each_with_index do |user_match, index|
+      user_match.update(:victory_position => index)
+    end
+  end
+
+  def set_rankings()
+    general = self.tournament.nil?
+    tournament = (not self.tournament.nil?)
+
+    attributes_general = []
+    attributes_free = []
+    attributes_tournament = []
+    winner = true
+    user_matches_ordered = self.user_matches.order(vp: :desc)
+
+    user_matches_ordered.each do |elem|
+      elem_user = User.find(elem[:user_id])
+      general ? attributes_general.push({:rating => elem_user.elo_general, :winner => winner, :provisional => (elem_user.matches_played<=2)}) : nil
+      (general or tournament) ? attributes_free.push({:rating => elem_user.elo_free, :winner => winner, :provisional => (elem_user.matches_played<=2)}) : nil
+      tournament ? attributes_tournament.push({:rating => elem_user.elo_tournament, :winner => winner, :provisional => (elem_user.matches_played<=2)}) : nil
+      winner = false
+    end
+
+    if general
+      calculator_general = Elo_Calculator.new(attributes_general)
+      ratings_general = calculator_general.calculate_rating
+      ratings_general.zip user_matches_ordered.each do |rating, user_match|
+        user_match.update(:elo_general_change => rating)
+      end
+    end
+
+    if general or tournament
+      calculator_free = Elo_Calculator.new(attributes_free)
+      ratings_free = calculator_free.calculate_rating
+      ratings_free.zip user_matches_ordered.each do |rating, user_match|
+        user_match.update(:elo_free_change => rating)
+      end
+    end
+
+    if tournament
+      calculator_tournament = Elo_Calculator.new(attributes_tournament)
+      ratings_tournament = calculator_tournament.calculate_rating
+      ratings_tournament.zip user_matches_ordered.each do |rating, user_match|
+        user_match.update(:elo_tournament_change => rating)
+      end
     end
   end
 
@@ -84,63 +137,10 @@ class Match < ApplicationRecord
       error_list.push(@match.errors)
       success = false
     end
-
     unless success
       @match.destroy
     end
-
     {:state => success, :errors => error_list, :object => (success ? @match : nil)}
-  end
-
-  def self.set_victory_positions(elems_array)
-    elems_array.sort_by! { |k| k.vp.nil? ? -1 : k.vp }.reverse!
-    counter = 1
-    elems_array.each do |elem|
-      elem.victory_position = counter
-      counter = counter + 1
-    end
-    elems_array
-  end
-
-  def self.set_rankings(user_matches, general=false, tournament=false)
-    attributes_general = []
-    attributes_free = []
-    attributes_tournament = []
-    winner = true
-    user_matches_ordered = user_matches.sort_by { |k| k.vp.nil? ? -1 : k.vp }.reverse!
-
-    user_matches_ordered.each do |elem|
-      elem_user = User.find(elem[:user_id])
-      general ? attributes_general.push({:rating => elem_user.elo_general, :winner => winner, :provisional => (elem_user.matches_played<=2)}) : nil
-      (general or tournament) ? attributes_free.push({:rating => elem_user.elo_free, :winner => winner, :provisional => (elem_user.matches_played<=2)}) : nil
-      tournament ? attributes_tournament.push({:rating => elem_user.elo_tournament, :winner => winner, :provisional => (elem_user.matches_played<=2)}) : nil
-      winner = false
-    end
-
-    if general
-      calculator_general = Elo_Calculator.new(attributes_general)
-      ratings_general = calculator_general.calculate_rating
-      (0..(ratings_general.count-1)).each do |i|
-        user_matches_ordered[i][:elo_general_change]=ratings_general[i]
-      end
-    end
-
-    if general or tournament
-      calculator_free = Elo_Calculator.new(attributes_free)
-      ratings_free = calculator_free.calculate_rating
-      (0..(ratings_free.count-1)).each do |i|
-        user_matches_ordered[i][:elo_free_change]=ratings_free[i]
-      end
-    end
-
-    if tournament
-      calculator_tournament = Elo_Calculator.new(attributes_tournament)
-      ratings_tournament = calculator_tournament.calculate_rating
-      (0..(ratings_tournament.count-1)).each do |i|
-        user_matches_ordered[i][:elo_tournament_change]=ratings_tournament[i]
-      end
-    end
-    user_matches_ordered
   end
 
 

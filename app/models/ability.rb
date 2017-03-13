@@ -79,7 +79,7 @@ class Ability
         tournament_round = (match.tournament.current_round==match.round)
       end
       # TODO Revise these conditions
-      (!participant.nil? and not local_validated and not match[:validated] and tournament_round and composition)
+      (not participant.nil? and not local_validated and not match[:validated] and tournament_round and composition)
     end
   end
 end

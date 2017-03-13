@@ -1,5 +1,5 @@
 class UserMatchesController < ApplicationController
-  before_action :set_user_match, only: [:show, :update, :destroy]
+  before_action :set_user_match, only: [:update, :destroy]
 
   # GET /user_matches
   # GET /user_matches.json
@@ -11,12 +11,11 @@ class UserMatchesController < ApplicationController
   # PATCH/PUT /user_matches/1.json
   def update
     respond_to do |format|
-      if not @user_match.vp.nil? and @user_match.update(user_match_params)
-        @user_match.match.validate_match
-        format.html { redirect_to back_or_default, notice: 'User match was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user_match }
+      if @user_match.update(user_match_params)
+        format.html { redirect_to back_or_default, notice: (t 'user_match.update.success') }
+        format.json { render @user_match, status: :ok }
       else
-        format.html { redirect_to back_or_default }
+        format.html { redirect_to back_or_default, }
         format.json { render json: @user_match.errors, status: :unprocessable_entity }
       end
     end

@@ -6,11 +6,11 @@ class CreateUserMatches < ActiveRecord::Migration[5.0]
       t.integer :vp
       #elo data is from before change
       t.integer :elo_general
-      t.integer :elo_general_change
+      t.integer :elo_general_change, null: false, default: 0
       t.integer :elo_free
-      t.integer :elo_free_change
+      t.integer :elo_free_change, null: false, default: 0
       t.integer :elo_tournament
-      t.integer :elo_tournament_change
+      t.integer :elo_tournament_change, null: false, default: 0
       t.integer :tournament_point
       t.integer :victory_position
       t.boolean :validated, null: false, default: false

@@ -95,7 +95,7 @@ aval_users = users.dup.to_a
 end
 
 
-1.times do
+5.times do
   Match.new_with_child(:date => Faker::Date.between(Date.today, 1.month.from_now),
                        :location => Faker::Address.city,
                        :user_matches_attributes => {

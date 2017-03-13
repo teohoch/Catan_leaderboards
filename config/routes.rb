@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-
-  resources :user_matches, only: [:index, :update, :destroy]
   authenticate :user do
     resources :tournaments, only: [:new, :create, :edit, :update, :destroy] do
       member do
@@ -8,10 +6,19 @@ Rails.application.routes.draw do
         post :end
       end
     end
-    resources :matches, only: [:new, :create, :edit, :update, :destroy]
+
+    resources :matches, only: [:new, :create, :edit, :update, :destroy] do
+      member do
+        patch :validate
+      end
+    end
+
+    resources :user_matches, only: [:update, :destroy]
   end
+
   resources :tournaments, only: [:index, :show]
   resources :matches, only: [:index, :show]
+  resources :user_matches, only: [:index]
   resources :inscriptions
   get 'home/index'
 

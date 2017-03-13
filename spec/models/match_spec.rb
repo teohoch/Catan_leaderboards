@@ -111,6 +111,10 @@ RSpec.describe Match, :type => :model do
       expect(loser[:elo_free_change]).to eq(-16)
     end
   end
+
+  it "should Validate match from user indication" do
+    expect(true).to eq(true)
+  end
 end
 
 

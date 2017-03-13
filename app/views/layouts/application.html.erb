@@ -13,7 +13,7 @@
 
       <% if user_signed_in? %>
           <%= menu_group pull: :left do %>
-              <%# menu_item (Tournament.model_name.human(count: 2)), tournaments_path, turbolinks: false %>
+              <%= menu_item (Tournament.model_name.human(count: 2)), tournaments_path, turbolinks: false %>
               <%= menu_item (Match.model_name.human(count: 2)), matches_path, turbolinks: false %>
           <% end %>
 

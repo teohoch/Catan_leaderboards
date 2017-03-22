@@ -35,12 +35,13 @@ es:
 
   title: "Ranking Jugadores"
 
-  first:  "Primer Lugar"
-  second: "Segundo Lugar"
-  third:  "Tercer Lugar"
-  fourth: "Cuarto Lugar"
-  fith:   "Quinto Lugar"
-  sixth:  "Sexto Lugar"
+  first_place:  "Primer Lugar"
+  second_place: "Segundo Lugar"
+  third_place:  "Tercer Lugar"
+  fourth_place: "Cuarto Lugar"
+  fith_place:   "Quinto Lugar"
+  sixth_place:  "Sexto Lugar"
+  invalid_place: "Posicion Invalida"
 
   start: "Iniciar"
   end: "Finalizar"
@@ -208,3 +209,4 @@ es:
   user_match:
     update:
       success: "Relacion Usuario/Partida actualizada correctamente."
+  invalid: "Invalido"

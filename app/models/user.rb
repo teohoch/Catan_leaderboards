@@ -5,6 +5,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :inscriptions
+  has_many :tournaments, through: :inscriptions
+
+  has_many :officed_tournaments, :class_name => 'Tournament', :foreign_key => 'officer_id'
+
   has_many :user_matches
   has_many :matches, through: :user_matches
 
@@ -19,7 +23,7 @@ class User < ApplicationRecord
     if self[:position_free] > 0
       self[:position_free]
     else
-      I18n.t "not_asigned"
+      I18n.t 'not_asigned'
     end
   end
 
@@ -27,7 +31,7 @@ class User < ApplicationRecord
     if self[:position_general] > 0
       self[:position_general]
     else
-      I18n.t "not_asigned"
+      I18n.t 'not_asigned'
     end
   end
 
@@ -35,13 +39,13 @@ class User < ApplicationRecord
     if self[:position_tournament] > 0
       self[:position_tournament]
     else
-      I18n.t "not_asigned"
+      I18n.t 'not_asigned'
     end
   end
 
 
   def self.update_position_general
-    sorted = User.all.order("elo_general DESC")
+    sorted = User.all.order('elo_general DESC')
     pos = 0
     last_elo = nil
     sorted.each do |elem|
@@ -57,7 +61,7 @@ class User < ApplicationRecord
   end
 
   def self.update_position_free
-    sorted = User.all.order("elo_free DESC")
+    sorted = User.all.order('elo_free DESC')
     pos = 0
     last_elo = nil
     sorted.each do |elem|
@@ -73,7 +77,7 @@ class User < ApplicationRecord
   end
 
   def self.update_position_tournament
-    sorted = User.all.order("elo_tournament DESC")
+    sorted = User.all.order('elo_tournament DESC')
     pos = 0
     last_elo = nil
     sorted.each do |elem|

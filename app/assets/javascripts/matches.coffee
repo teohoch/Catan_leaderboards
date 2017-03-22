@@ -16,7 +16,7 @@ jQuery ->
   if not_tournament and max_users >= 3
     $("#add_purchase_item").show()
 
-  if max_users >= 3
+  if max_users >= min
     $("#add_purchase_item").show()
 
   language = $('#matches').data('language')

@@ -25,6 +25,7 @@ handleEvent "turbolinks:load", ->
   if loaded
     dispatch("page:load")
 
+#noinspection CoffeeScriptUnusedLocalSymbols
 jQuery?(document).on "ajaxSuccess", (event, xhr, settings) ->
   if jQuery.trim(xhr.responseText).length > 0
     dispatch("page:update")

@@ -21,9 +21,8 @@ ActiveRecord::Schema.define(version: 20170216021751) do
     t.integer  "present_position"
     t.integer  "present_round"
     t.integer  "score"
-    t.boolean  "officer",          default: false, null: false
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["tournament_id"], name: "index_inscriptions_on_tournament_id", using: :btree
     t.index ["user_id"], name: "index_inscriptions_on_user_id", using: :btree
   end
@@ -54,10 +53,10 @@ ActiveRecord::Schema.define(version: 20170216021751) do
     t.integer  "current_round",  default: 0
     t.boolean  "must_end_round", default: true, null: false
     t.integer  "registered",     default: 0,    null: false
-    t.integer  "user_id"
+    t.integer "officer_id", null: false
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
-    t.index ["user_id"], name: "index_tournaments_on_user_id", using: :btree
+    t.index ["officer_id"], name: "index_tournaments_on_officer_id", using: :btree
   end
 
   create_table "user_matches", force: :cascade do |t|
@@ -107,7 +106,7 @@ ActiveRecord::Schema.define(version: 20170216021751) do
   add_foreign_key "inscriptions", "tournaments"
   add_foreign_key "inscriptions", "users"
   add_foreign_key "matches", "tournaments"
-  add_foreign_key "tournaments", "users"
+  add_foreign_key "tournaments", "users", column: "officer_id"
   add_foreign_key "user_matches", "matches"
   add_foreign_key "user_matches", "users"
 end

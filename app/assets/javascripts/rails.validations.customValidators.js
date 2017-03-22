@@ -8,4 +8,4 @@ window.ClientSideValidations.validators.local['client_presence'] = function (ele
     if (/^\s*$/.test(element.val() || '')) {
         return options.message
     }
-}
+};

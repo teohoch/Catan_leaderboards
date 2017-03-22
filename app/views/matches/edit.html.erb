@@ -24,13 +24,13 @@
         <% end %>
 
 
-        <%= link_to_add_fields "Agregar Jugador", f, :user_matches, true, 'add_purchase_item' %>
+        <%= link_to_add_fields 'Agregar Jugador', f, :user_matches, true, 'add_purchase_item' %>
     <% end %>
     <br>
 
     <div class="form-actions">
-      <%= f.button :submit, id: "submit_button" %>
-      <%= link_to (t 'back'), matches_path, class: "btn btn-danger" %>
+      <%= f.button :submit, id: 'submit_button' %>
+      <%= link_to (t 'back'), matches_path, class: 'btn btn-danger' %>
     </div>
 <% end %>
 

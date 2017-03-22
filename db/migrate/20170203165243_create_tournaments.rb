@@ -14,7 +14,7 @@ class CreateTournaments < ActiveRecord::Migration[5.0]
       t.boolean :must_end_round, null: false, default: true
       t.integer :registered, null: false, default: 0
 
-      t.references :user, foreign_key: true
+      t.references :officer, index: true, null: false, foreign_key: {to_table: :users}
 
       t.timestamps
     end

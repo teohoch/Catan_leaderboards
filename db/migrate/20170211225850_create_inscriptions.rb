@@ -6,7 +6,6 @@ class CreateInscriptions < ActiveRecord::Migration[5.0]
       t.integer :present_position
       t.integer :present_round
       t.integer :score
-      t.boolean :officer, null: false, default: false
 
       t.timestamps
     end

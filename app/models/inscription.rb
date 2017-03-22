@@ -4,8 +4,8 @@ class Inscription < ApplicationRecord
 
   def destroy
     if self.tournament.status != 0
-      self.errors.add(:base,(I18n.t "activerecord.errors.models.inscription.attributes.base.oncourse"))
-      return false
+      self.errors.add(:base, (I18n.t 'activerecord.errors.models.inscription.attributes.base.oncourse'))
+      false
     else
       super
     end

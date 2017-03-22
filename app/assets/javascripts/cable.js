@@ -5,6 +5,7 @@
 //= require_self
 //= require_tree ./channels
 
+//noinspection ThisExpressionReferencesGlobalObjectJS
 (function() {
   this.App || (this.App = {});
 

@@ -29,7 +29,7 @@ class InscriptionsController < ApplicationController
                                     :tournament_id => inscription_params[:tournament_id] )
     respond_to do |format|
       if @inscription.save
-        format.html { redirect_to back_or_default, notice: (t "succesfully_subscribed") }
+        format.html { redirect_to back_or_default, notice: (t 'succesfully_subscribed') }
         format.json { render :show, status: :created, location: @inscription }
       else
         format.html { render back_or_default }
@@ -57,7 +57,7 @@ class InscriptionsController < ApplicationController
   def destroy
     if @inscription.destroy
       respond_to do |format|
-        format.html { redirect_to back_or_default, notice: (t "succesfully_unsubscribed") }
+        format.html { redirect_to back_or_default, notice: (t 'succesfully_unsubscribed') }
         format.json { head :no_content }
       end
     else

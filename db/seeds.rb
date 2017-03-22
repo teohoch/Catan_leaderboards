@@ -6,17 +6,17 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-fuser = User.new(:email => "teohoch2@gmail.com",
-                 :name => "Teodoro Hochfärber",
+fuser = User.new(:email => 'teohoch2@gmail.com',
+                 :name => 'Teodoro Hochfärber',
                  :password => 'password',
                  :password_confirmation => 'password')
 
 fuser.save
 
-fuser2 = User.new(:email => "teodoro.hochfarber@gmail.com",
-                 :name => "Teo2",
-                 :password => 'password',
-                 :password_confirmation => 'password')
+fuser2 = User.new(:email => 'teodoro.hochfarber@gmail.com',
+                  :name => 'Teo2',
+                  :password => 'password',
+                  :password_confirmation => 'password')
 
 fuser2.save
 
@@ -37,10 +37,10 @@ end
 
 
 tournament1 = Tournament.new(
-    :name => "Torneo1",
-    :user_id => fuser.id,
+    :name => 'Torneo1',
+    :officer_id => fuser.id,
     :number_players => 8,
-    :prize => "Something Shiny",
+    :prize => 'Something Shiny',
     :entrance_fee => 10500,
     :date => Date.tomorrow,
     :rounds => 2,
@@ -56,8 +56,8 @@ aval_users = users.dup.to_a
 end
 
 tournament3 = Tournament.new(
-    :name => "Torneo1",
-    :user_id => fuser.id,
+    :name => 'Torneo1',
+    :officer_id => fuser.id,
     :number_players => 9,
     :prize => Faker::StarWars.vehicle,
     :entrance_fee => 10500,
@@ -75,10 +75,10 @@ aval_users = users.dup.to_a
 end
 
 tournament2 = Tournament.new(
-    :name => "Torneo2",
-    :user_id => fuser.id,
+    :name => 'Torneo2',
+    :officer_id => fuser.id,
     :number_players => 8,
-    :prize => "Something opaque",
+    :prize => 'Something opaque',
     :entrance_fee => 10500,
     :date => Date.tomorrow,
     :rounds => 0,
@@ -100,20 +100,20 @@ end
                        :location => Faker::Address.city,
                        :user_matches_attributes => {
                            0 => {
-                               :user_id => "4",
-                               :validated => "true",
+                               :user_id => '4',
+                               :validated => 'true',
                                :vp => Faker::Number.between(1, 10)},
                            1487648543682 => {
-                               :user_id => "2",
-                               :_destroy => "false",
+                               :user_id => '2',
+                               :_destroy => 'false',
                                :vp => Faker::Number.between(1, 10)},
                            1487648544163 => {
-                               :user_id => "3",
-                               :_destroy => "false",
+                               :user_id => '3',
+                               :_destroy => 'false',
                                :vp => Faker::Number.between(1, 10)},
                            1487648544636 => {
-                               :user_id => "1",
-                               :_destroy => "false",
+                               :user_id => '1',
+                               :_destroy => 'false',
                                :vp => Faker::Number.between(1, 10)}
                        })
 end

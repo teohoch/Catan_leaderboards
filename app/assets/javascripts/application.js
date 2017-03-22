@@ -28,11 +28,13 @@
 $(function() {
     var mindate = -Infinity;
     var maxdate = Infinity;
-    var language = "en"
-    var raw_mindate = $('input.datepicker').data("mindate");
-    var raw_maxdate = $('input.datepicker').data("maxdate");
-    if($('body').data("locale")){
-        language = $('body').data("locale")
+    var language = "en";
+    var datepicker = $('input.datepicker');
+    var raw_mindate = datepicker.data("mindate");
+    var raw_maxdate = datepicker.data("maxdate");
+    var body = $('body');
+    if (body.data("locale")) {
+        language = body.data("locale")
     }
 
     if (raw_mindate){
@@ -42,7 +44,7 @@ $(function() {
         maxdate = new Date(raw_maxdate)
     }
 
-    $('input.datepicker').data({behaviour: "datepicker"}).datepicker({
+    datepicker.data({behaviour: "datepicker"}).datepicker({
         startDate: mindate,
         endDate: maxdate,
         language: language

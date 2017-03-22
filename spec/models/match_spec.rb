@@ -1,9 +1,67 @@
 require 'rails_helper'
 
 RSpec.describe Match, :type => :model do
+  def match_parameter_preparator(n_users = 4, n_valid = 1, tournament = false)
+    date = Faker::Date.between(Date.today, 1.month.from_now)
+    location = Faker::Address.city
+
+    user_matches_params = {}
+    users = []
+
+    validated = n_valid
+    n_users.times do |index|
+      user = FactoryGirl.create(:user)
+      users.push(user)
+      user_matches_params[index] = {
+          :user_id => "#{user.id}",
+          :validated => (validated > 0 ? 'true' : false),
+          :vp => Faker::Number.between(1, 10)}
+      validated = validated - 1
+    end
+    {:params => {
+        :date => date,
+        :location => location,
+        :tournament_id => ((tournament != false) ? tournament : nil),
+        :user_matches_attributes => user_matches_params},
+     :users => users}
+  end
+
+  def new_with_child_template(users = 4, n_valid = 1, tournament = false)
+    if tournament
+      tournament_object = FactoryGirl.create(:tournament)
+      params = match_parameter_preparator(users, n_valid, tournament_object.id)
+    else
+      params = match_parameter_preparator(users, n_valid, false)
+    end
+
+    match = Match.new_with_child(params[:params])
+
+    expect(match[:status]).to eq(true)
+    expect(match[:errors].empty?).to eq(true)
+
+    expect(match[:object].date).to eq(params[:params][:date])
+    expect(match[:object].location).to eq(params[:params][:location])
+    expect(match[:object].validated).to eq(n_valid >=2)
+
+    if tournament
+      expect(match[:object].tournament).not_to eq(nil)
+      expect(match[:object].tournament.id).to eq(tournament_object.id)
+    else
+      expect(match[:object].tournament).to eq(nil)
+    end
+    valid_user_matches = 0
+    match[:object].user_matches.each do |user_match|
+      expect(params[:users]).to include(user_match.user)
+      valid_user_matches = (user_match.validated ? (valid_user_matches + 1) : valid_user_matches)
+    end
+
+    expect(valid_user_matches).to eq(n_valid)
+  end
+
+
   it 'should Validate match' do
     match = FactoryGirl.create(:match, n_valids: 2)
-    match.validate
+    match.validate_record
     expect(match[:validated]).to eq(true)
 
     user_matches = match.user_matches.order(vp: :desc)
@@ -32,7 +90,38 @@ RSpec.describe Match, :type => :model do
     end
   end
 
-  it "should assign victory position according to VP" do
+  it 'should Validate match from user indication' do
+    match = FactoryGirl.create(:match, n_valids: 2)
+    match.validate_record
+    expect(match[:validated]).to eq(true)
+
+    user_matches = match.user_matches.order(vp: :desc)
+    previous = nil
+    current_winner = nil
+    current_losers = []
+
+    user_matches.each do |user_match|
+      unless previous.nil?
+        expect(previous[:victory_position]).to be < user_match[:victory_position]
+      end
+      previous = user_match
+
+      if current_winner.nil?
+        current_winner = user_match
+      else
+        if current_winner[:elo_general_change] < user_match[:elo_general_change]
+          current_losers.push(current_winner) unless current_winner.nil?
+          current_winner = user_match
+        end
+      end
+    end
+    expect(current_winner[:elo_general_change]).to eq(48)
+    current_losers.each do |loser|
+      expect(loser[:elo_general_change]).to eq(-16)
+    end
+  end
+
+  it 'should assign victory position according to VP' do
     match = FactoryGirl.create(:match)
     match.set_victory_positions
     user_matches = match.user_matches.order(vp: :desc)
@@ -112,10 +201,91 @@ RSpec.describe Match, :type => :model do
     end
   end
 
-  it "should Validate match from user indication" do
-    expect(true).to eq(true)
+  it 'should Create a new Regular 4-player Match with the associated user_matches (0 valid)' do
+    users = 4
+    n_valid = 0
+    tournament = false
+    new_with_child_template(users, n_valid, tournament)
   end
-end
 
+  it 'should Create a new Regular 4-player Match with the associated user_matches (1 valid)' do
+    users = 4
+    n_valid = 1
+    tournament = false
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Regular 4-player Match with the associated user_matches (2 valid)' do
+    users = 4
+    n_valid = 2
+    tournament = false
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Regular 6-player Match with the associated user_matches (0 valid)' do
+    users = 6
+    n_valid = 0
+    tournament = false
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Regular 6-player Match with the associated user_matches (1 valid)' do
+    users = 6
+    n_valid = 1
+    tournament = false
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Regular 6-player Match with the associated user_matches (2 valid)' do
+    users = 6
+    n_valid = 2
+    tournament = false
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Tournament 4-player Match with the associated user_matches (0 valid)' do
+    users = 4
+    n_valid = 0
+    tournament = true
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Tournament 4-player Match with the associated user_matches (1 valid)' do
+    users = 4
+    n_valid = 1
+    tournament = true
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Tournament 4-player Match with the associated user_matches (2 valid)' do
+    users = 4
+    n_valid = 2
+    tournament = true
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Tournament 6-player Match with the associated user_matches (0 valid)' do
+    users = 6
+    n_valid = 0
+    tournament = true
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Tournament 6-player Match with the associated user_matches (1 valid)' do
+    users = 6
+    n_valid = 1
+    tournament = true
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+  it 'should Create a new Tournament 6-player Match with the associated user_matches (2 valid)' do
+    users = 6
+    n_valid = 2
+    tournament = true
+    new_with_child_template(users, n_valid, tournament)
+  end
+
+
+end
 
 

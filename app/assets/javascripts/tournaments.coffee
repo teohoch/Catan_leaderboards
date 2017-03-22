@@ -2,7 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 jQuery ->
-  pyramidal= ranking = pyramidal_set = ranking_set = max_players = false
+  pyramidal = false
+  ranking = false
+  pyramidal_set = false
+  ranking_set = false
+  max_players = false
   options = null
 
   language = $('#tournaments').data('language')
@@ -88,7 +92,7 @@ jQuery ->
       grandparent.next().before ($("#general_mode").data("max-players"))
       max_players = true
 
-      $("#tournament_number_players").bind "blur onchange oninput input", (event)->
+      $("#tournament_number_players").bind "blur onchange oninput input", ()->
         parent = $("#number_players")
         if (pyramidal)
           if pyramidal_set

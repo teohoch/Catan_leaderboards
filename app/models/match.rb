@@ -6,19 +6,17 @@ class Match < ApplicationRecord
   accepts_nested_attributes_for :user_matches
   validates :date, :location, client_presence: true
 
-
   def validated_human
     if self.validated
-      I18n.t "positive"
+      I18n.t 'positive'
     else
-      I18n.t "negatory"
+      I18n.t 'negatory'
     end
   end
 
   def status
     self.validated ? (I18n.t :ended_f) : (I18n.t :waiting)
   end
-
 
   def validated_count
     self.user_matches.where(:validated => true).count
@@ -28,12 +26,12 @@ class Match < ApplicationRecord
     current_user_match = @match.user_matches.find_by_user_id(current_user.id)
     success = (not current_user_match.nil?)
     if success && current_user_match.update(:validated => true)
-      @match.validate
+      @match.validate_record
     end
     success
   end
 
-  def validate
+  def validate_record
     if not self.validated and self.validated_count >= 2
       self.update(validated: true)
 
@@ -60,14 +58,14 @@ class Match < ApplicationRecord
     end
   end
 
-  def set_victory_positions()
+  def set_victory_positions
     user_matches = self.user_matches.order(vp: :desc)
     user_matches.each_with_index do |user_match, index|
       user_match.update(:victory_position => index)
     end
   end
 
-  def set_rankings()
+  def set_rankings
     general = self.tournament.nil?
     tournament = (not self.tournament.nil?)
 
@@ -110,39 +108,51 @@ class Match < ApplicationRecord
     end
   end
 
-  def self.new_with_child(match_params, tournament=false)
-    @match = Match.new(:date => match_params[:date],
-                       :location => match_params[:location],
-                       :tournament_id => match_params[:tournament_id],
-                       :round => match_params[:round])
+  def self.new_with_child(match_params)
     success = true
     error_list = []
-    if @match.save
+
+    match = Match.new(:date => match_params[:date],
+                      :location => match_params[:location],
+                      :tournament_id => (match_params.key?(:tournament_id) ? match_params[:tournament_id] : nil),
+                      :round => match_params[:round])
+
+
+    n_valid = 0
+    if match.save
       elems_array = []
-      match_params[:user_matches_attributes].each do |id, elem|
-        a = UserMatch.new(:user_id => elem[:user_id],
-                          :vp => elem[:vp],
-                          :match_id => @match.id,
-                          :validated => elem.key?(:validated) ? elem[:validated] : false)
-        elems_array.push(a)
-      end
-      elems_array.each do |elem|
-        unless elem.save
-          error_list.push(elem.errors)
+      match_params[:user_matches_attributes].each do |_, elem|
+        user_match = UserMatch.new(:user_id => elem[:user_id],
+                                   :vp => elem[:vp],
+                                   :match_id => match.id,
+                                   :validated => elem.key?(:validated) ? elem[:validated] : false)
+        n_valid = (user_match.validated ? n_valid + 1 : n_valid)
+
+        unless user_match.save
+          error_list.push(user_match.errors)
           success = false
           break
         end
+        elems_array.push(user_match)
       end
     else
-      error_list.push(@match.errors)
+      error_list.push(match.errors)
       success = false
     end
-    unless success
-      @match.destroy
-    end
-    {:state => success, :errors => error_list, :object => (success ? @match : nil)}
-  end
 
+    if n_valid >= 2
+      match.validated = true
+      unless match.save
+        success = false
+        error_list.push(match.errors)
+      end
+    end
+
+    unless success
+      match.destroy
+    end
+    {:status => success, :errors => error_list, :object => (success ? match : nil)}
+  end
 
 end
 

@@ -1,10 +1,12 @@
-<h1><%= t "title" %></h1>
+<h1><%= t 'title' %></h1>
 <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-4">
     <table class="display table table-condensed table-responsive">
       <thead>
-      <th class="center_element"><%= User.human_attribute_name(:position_general) %></th>
-      <th><%= User.human_attribute_name(:name) %> </th>
+      <tr>
+        <th class="center_element"><%= User.human_attribute_name(:position_general) %></th>
+        <th><%= User.human_attribute_name(:name) %> </th>
+      </tr>
 
       </thead>
       <tbody>
@@ -19,11 +21,13 @@
     </table>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-4">
     <table class="display table table-condensed table-responsive">
       <thead>
-      <th class="center_element"><%= User.human_attribute_name(:position_tournament) %></th>
-      <th><%= User.human_attribute_name(:name) %> </th>
+      <tr>
+        <th class="center_element"><%= User.human_attribute_name(:position_tournament) %></th>
+        <th><%= User.human_attribute_name(:name) %> </th>
+      </tr>
 
       </thead>
       <tbody>
@@ -38,11 +42,13 @@
     </table>
   </div>
 
-  <div class="col-md-3">
+  <div class="col-md-4">
     <table class="display table table-condensed table-responsive">
       <thead>
-      <th class="center_element"><%= User.human_attribute_name(:position_free) %></th>
-      <th><%= User.human_attribute_name(:name) %> </th>
+      <tr>
+        <th class="center_element"><%= User.human_attribute_name(:position_free) %></th>
+        <th><%= User.human_attribute_name(:name) %> </th>
+      </tr>
 
       </thead>
       <tbody>

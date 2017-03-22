@@ -6,7 +6,7 @@ class Elo_Calculator
 
   end
 
-  def calculate_rating()
+  def calculate_rating
     results = []
 
     @users.each do |user|

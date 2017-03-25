@@ -22,11 +22,15 @@ FactoryGirl.define do
     end
 
     trait :free4all do
-      mode 0
+      mode -1
     end
 
     trait :pyramidal do
       mode 1
+    end
+
+    trait :pyramidal_instant_winner do
+      mode 0
     end
 
     trait :pyramidal_1 do

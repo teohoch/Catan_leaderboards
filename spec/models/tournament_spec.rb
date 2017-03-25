@@ -1,4 +1,3 @@
-require 'rails_helper'
 
 describe Tournament, :type => :model do
   it "should have method start" do
@@ -23,7 +22,7 @@ describe Tournament, :type => :model do
         end
 
         it "should be Free4All" do
-          expect(@tournament.mode).to eq(0)
+          expect(@tournament.mode).to eq(-1)
         end
       end
 
@@ -38,7 +37,7 @@ describe Tournament, :type => :model do
         end
 
         it "should be Free4All" do
-          expect(@tournament.mode).to eq(0)
+          expect(@tournament.mode).to eq(-1)
         end
 
         it 'should have 8 inscriptions' do
@@ -64,7 +63,7 @@ describe Tournament, :type => :model do
         end
 
         it "should be Free4All" do
-          expect(@tournament.mode).to eq(0)
+          expect(@tournament.mode).to eq(-1)
         end
 
         it 'should have 8 inscriptions' do

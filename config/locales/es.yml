@@ -210,3 +210,7 @@ es:
     update:
       success: "Relacion Usuario/Partida actualizada correctamente."
   invalid: "Invalido"
+  pyramid_generator:
+    board_size_error: "Esta configuracion de tablero no esta permitida"
+    minimum_participants: "El minimo de participantes en un torneo es 3 personas. Por favor agregue mas participantes e intente mas tarde."
+    invalid_parameter_combination: "Combinacion invalida de propiedades del Torneo. Cambie la cantidad de ganadores por ronda o el numero de jugadores, y pruebe nuevamente."

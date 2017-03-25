@@ -1,6 +1,4 @@
-require 'rails_helper'
-
-RSpec.describe Match, :type => :model do
+describe Match, :type => :model do
   def match_parameter_preparator(n_users = 4, n_valid = 1, tournament = false)
     date = Faker::Date.between(Date.today, 1.month.from_now)
     location = Faker::Address.city
@@ -21,7 +19,7 @@ RSpec.describe Match, :type => :model do
     {:params => {
         :date => date,
         :location => location,
-        :tournament_id => ((tournament != false) ? tournament : nil),
+        :tournament_id => ((tournament) ? tournament : nil),
         :user_matches_attributes => user_matches_params},
      :users => users}
   end

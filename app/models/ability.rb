@@ -32,10 +32,10 @@ class Ability
 
     can :read, Tournament
     can :create, Tournament
-    can :update, Tournament, :user_id => user.id
-    can :destroy, Tournament, :user_id => user.id
-    can :start, Tournament, :user_id => user.id, :status => 0
-    can :end, Tournament, :user_id => user.id, :status => 1
+    can :update, Tournament, :officer_id => user.id
+    can :destroy, Tournament, :officer_id => user.id
+    can :start, Tournament, :officer_id => user.id, :status => 0
+    can :end, Tournament, :officer_id => user.id, :status => 1
 
     can :read, Match
     can :create, Match

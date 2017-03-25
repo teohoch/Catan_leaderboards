@@ -11,7 +11,7 @@ class Tournament < ApplicationRecord
   validates :mode, inclusion: { in: -1..5}
 
   def general_mode_human
-    if self.mode == 0
+    if self.mode == -1
       I18n.t 'tournamet_modes.free4all'
     else
       I18n.t 'tournamet_modes.pyramidal'
@@ -34,9 +34,9 @@ class Tournament < ApplicationRecord
   def mode_human
     case self.mode
       when -1
-        I18n.t 'tournamet_modes.instantwinner'
-      when 0
         I18n.t 'tournamet_modes.free4all'
+      when 0
+        I18n.t 'tournamet_modes.instantwinner'
       when 1
         I18n.t 'tournamet_modes.onewinner'
       when 2
@@ -54,7 +54,7 @@ class Tournament < ApplicationRecord
 
   def start
 
-    result = (self.mode ==0) ? start_free4all : start_pyramidal
+    result = (self.mode ==-1) ? start_free4all : start_pyramidal
 
     if status
       self.status=1
@@ -64,12 +64,12 @@ class Tournament < ApplicationRecord
     result
   end
 
-  MODES = {(I18n.t 'tournamet_modes.free4all') => 0,
-           (I18n.t 'tournamet_modes.pyramidal') => 1}
+  MODES = {(I18n.t 'tournamet_modes.free4all') => -1,
+           (I18n.t 'tournamet_modes.pyramidal') => 0}
 
   PYRAMIDAL_MODES = {
       (I18n.t 'tournamet_modes.not_allowed') => -2,
-      (I18n.t 'tournamet_modes.instantwinner') => -1,
+      (I18n.t 'tournamet_modes.instantwinner') => 0,
       (I18n.t 'tournamet_modes.onewinner') => 1,
       (I18n.t 'tournamet_modes.twowinner') => 2,
       (I18n.t 'tournamet_modes.threewinner') => 3,

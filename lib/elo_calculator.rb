@@ -2,7 +2,7 @@ class Elo_Calculator
 
   def initialize(attributes={})
     @users = attributes
-    @size = @users.count()
+    @size = @users.count
 
   end
 
@@ -19,7 +19,7 @@ class Elo_Calculator
       if user[:provisional]
         volatility_constant = 64.0
       end
-      result = volatility_constant * (add - win_expentancy(user[:rating], get_average_rating(current_position)))
+      result = volatility_constant * (add - win_expectancy(user[:rating], get_average_rating(current_position)))
       results.push(result)
     end
     results
@@ -34,7 +34,7 @@ class Elo_Calculator
     (total / (@size - 1.0))
   end
 
-  def win_expentancy(rating, opp_rating)
+  def win_expectancy(rating, opp_rating)
     exponent = (-1.0 * (rating - opp_rating)) / 400.0
     denominator = (10**exponent) + 1.0
     ((1.0 / denominator) * (2.0 / @size))

@@ -57,7 +57,6 @@ fabric.properties
 ### Rails ###
 *.rbc
 capybara-*.html
-.rspec
 /log
 /tmp
 /db/*.sqlite3
@@ -101,3 +100,4 @@ bower.json
 .byebug_history
 
 # End of https://www.gitignore.io/api/rubymine,rails
+!/.rspec

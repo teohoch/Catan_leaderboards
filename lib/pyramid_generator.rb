@@ -1,96 +1,94 @@
 class PyramidGenerator
-  def self.generate(board_mode, n_winners, users)
-    participants = users.count
+
+
+  def self.generate(board_mode, n_winners, player_ids)
+    participants = player_ids.count
     status = true
     errors = []
     object = nil
 
-    inf = 1.0/0
-
-    case board_mode
-      when 4
-        case participants
-          when -inf..2
-            status = false
-            errors.push(ArgumentError.new(I18n.t('pyramid_generator.minimum_participants')))
-          when 3..4
-            object = {}
-            object[:general_configuration] = [[participants]]
-            object[:first_round] = [users]
-          when 5
-            status = false
-            errors.push(ArgumentError.new(I18n.t('pyramid_generator.invalid_parameter_combination')))
-          when 6..8
-            if n_winners == 2
-            else
-              status = false
-              errors.push(ArgumentError.new(I18n.t('pyramid_generator.invalid_parameter_combination')))
-            end
-          when 9..inf
-            if n_winners == 1
-
-            elsif n_winners == 2
-            else
-              status = false
-              errors.push(ArgumentError.new(I18n.t('pyramid_generator.invalid_parameter_combination')))
-            end
-          else
-            status = false
-            errors.push(ArgumentError.new(I18n.t('pyramid_generator.invalid_parameter_combination')))
-        end
-      when 6
-        not_implemented
+    result = self.generator(board_mode, n_winners, participants)
+    case result[:status]
+      when -2
+        status = false
+        errors.push(ArgumentError.new(I18n.t('pyramid_generator.minimum_participants')))
+      when 0
+        object = {
+            :general_configuration => result[:rounds].reverse,
+            :first_round => self.first_round_assigner(result[:rounds].last[2], player_ids)}
       else
         status = false
-        errors.push(ArgumentError.new(t('pyramid_generator.board_size_error')))
+        errors.push(ArgumentError.new(I18n.t('pyramid_generator.invalid_parameter_combination')))
     end
-
     {:status => status, :errors => errors, :object => object}
   end
 
-  def self.validator(board_mode, n_winners, users, round=0)
-    inf = 1.0/0
+  private
+
+  # @param [Integer] board_mode The maximum number of players allowed in each match
+  # @param [Integer] n_winners  The number of winners in each match
+  # @param [Integer] players  The total number of players
+  # @param [Integer] round The current round, counting from 0
+  # @return [Hash] opts
+  # @option opts [Integer] :status The status of the operation. -2 is minimum of players not met, -1 is a invalid configuration and 0 is a successful operation
+  # @option opts [Array<[Integer,Integer,Array<Integer>]>] :rounds Returns an array of Rounds, which are an Array in the form [Round_number,Number of matches in round ,Array<Number of players in match>]>
+  def self.generator(board_mode, n_winners, players, round=0) #:doc:
     output = {:status => nil, :rounds => []}
-    minimum_participants =[n_winners+1, 3].max
-    case users
+    inf = 1.0/0
+    case players
       when -inf..2
         output[:status] = -2
       when 3..board_mode
         output[:status] = 0
-        output[:rounds].push([round, [users]])
+        output[:rounds].push([round, 1, [players]])
       else
-
         flag = false
-        board_mode.downto(minimum_participants).to_a.each do |participants|
-          n_matches = (users.to_f / participants)
-          n_matches = (users <= (n_matches.to_i*board_mode) ? n_matches.floor : n_matches.ceil).to_i
+        lower_bound = (players.to_f/board_mode).ceil
+        upper_bound = (players.to_f/3.0).ceil
 
-          if n_matches * n_winners < users && n_matches * participants <= users && n_matches * n_winners >= minimum_participants
-            next_recursion = self.validator(board_mode, n_winners, n_matches * n_winners, round+1)
+        (lower_bound..upper_bound).each do |number_of_matches|
+          if number_of_matches * n_winners < players
+            current_round = []
+            remaining = players - (3 * number_of_matches)
 
-            if next_recursion[:status] == 0
-              current_round = []
-              if (participants * n_matches) == users
-                n_matches.times do
-                  current_round.push(participants)
+            # Check if it fits perfectly in N boxes
+            if remaining == 0
+              number_of_matches.times { current_round.push(3) }
+            elsif remaining < 0
+              break
+            else
+              full_add = remaining/number_of_matches
+              if (3+full_add)<= board_mode and (3+full_add) * number_of_matches <= players
+                number_of_matches.times { current_round.push(3+full_add) }
+                current_count = number_of_matches * (3+full_add)
+                unless current_count >= players
+                  current_round.each_with_index do |match, index|
+                    current_round[index] = match + 1
+                    current_count = current_count + 1
+                    if current_count >= players
+                      break
+                    end
+                  end
+                end
+                minimum_size_flag = false
+                current_round.each do |match|
+                  minimum_size_flag= (match > n_winners) ? nil : true
+                end
+                if minimum_size_flag
+                  break
                 end
               else
-                plus_matches = users -(participants * n_matches)
-                plus_matches.times do
-                  current_round.push(participants+1)
-                end
-                (n_matches - plus_matches).times do
-                  current_round.push(participants)
-                end
+                break
               end
+            end
 
-
+            next_recursion = self.generator(board_mode, n_winners, n_winners*number_of_matches, round + 1)
+            if next_recursion[:status] == 0
               output[:status] = 0
               output[:rounds].concat(next_recursion[:rounds])
-              output[:rounds].push([round, current_round])
+              output[:rounds].push([round, number_of_matches, current_round])
               flag = true
               break
-
             end
           end
         end
@@ -101,52 +99,27 @@ class PyramidGenerator
     end
     output
   end
-end
 
-puts (15).to_s + PyramidGenerator.validator(4, 1, 15).to_s
+  # @param [Array<Integer>] first_round_config The match configurations for the first round. Should be an array of integers, representing the number of players in each round
+  # @param [Integer] player_ids The ids of the users available for the first round
+  # @return [Array<[Array<Integer>]>] Returns an array of Matches_representations, which are in themselves an array of user ids
+  def self.first_round_assigner(first_round_config, player_ids) #:doc:
+    output = []
+    player_ids_local = player_ids.dup
+    first_round_config.each do |match|
+      generated_match = self.generate_random(match, player_ids_local)
+      output.push(generated_match[0])
+      player_ids_local = generated_match[1]
+    end
+    output
+  end
 
-puts 'Tablero de 4 - Pasa 1'
-
-30.times do |index|
-  puts (index+1).to_s + PyramidGenerator.validator(4, 1, index+1).to_s
-end
-
-puts " "
-puts 'Tablero de 4 - Pasa 2'
-20.times do |index|
-  puts (index+1).to_s + PyramidGenerator.validator(4, 2, index+1).to_s
-end
-
-
-puts " "
-puts 'Tablero de 4 - Pasa 3'
-20.times do |index|
-  puts (index+1).to_s + PyramidGenerator.validator(4, 3, index+1).to_s
-end
-
-
-puts " "
-puts 'Tablero de 6 - Pasa 1'
-
-30.times do |index|
-  puts (index+1).to_s + PyramidGenerator.validator(6, 1, index+1).to_s
-end
-
-puts " "
-puts 'Tablero de 6 - Pasa 2'
-20.times do |index|
-  puts (index+1).to_s + PyramidGenerator.validator(6, 2, index+1).to_s
-end
-
-
-puts " "
-puts 'Tablero de 6 - Pasa 3'
-20.times do |index|
-  puts (index+1).to_s + PyramidGenerator.validator(6, 3, index+1).to_s
-end
-
-puts " "
-puts 'Tablero de 6 - Pasa 4'
-20.times do |index|
-  puts (index+1).to_s + PyramidGenerator.validator(6, 4, index+1).to_s
+  def self.generate_random(count, aval_players_ids) #:doc:
+    match_ids=[]
+    count.times do
+      rand = rand(aval_players_ids.count)
+      match_ids.push(aval_players_ids.slice!(rand))
+    end
+    [match_ids.sort, aval_players_ids]
+  end
 end

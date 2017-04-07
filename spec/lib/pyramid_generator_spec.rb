@@ -97,7 +97,7 @@ RSpec.describe PyramidGenerator do
             expect(subject[:general_configuration].empty?).to be_falsey
             subject[:general_configuration].each do |round|
               expect(round.empty?).to be_falsey
-              round.each do |match|
+              round[2].each do |match|
                 expect(match).to be_between(3, @board_mode)
               end
             end
@@ -110,12 +110,12 @@ RSpec.describe PyramidGenerator do
           it 'round 1 should have 1 match' do
             expect(subject[:general_configuration].empty?).to be_falsey
             subject[:general_configuration].each do |round|
-              expect(round.count).to eq(1)
+              expect(round[1]).to eq(1)
             end
           end
 
           it 'the match should have 3 participants' do
-            expect(subject[:general_configuration][0][0]).to eq(3)
+            expect(subject[:general_configuration][0][2]).to match_array([3])
           end
         end
 
@@ -133,7 +133,7 @@ RSpec.describe PyramidGenerator do
           end
 
           it 'should have the same number of matches as the first round of general_configuration' do
-            expect(subject[:first_round].count).to eq(subject[:general_configuration][0].count)
+            expect(subject[:first_round].count).to eq(subject[:general_configuration][0][1])
           end
 
           it "should have the same number of players in each match as indicated in the general_configuration" do
@@ -141,7 +141,7 @@ RSpec.describe PyramidGenerator do
             subject[:first_round].each do |match|
               round_conf.push(match.count)
             end
-            expect(round_conf).to match_array(subject[:general_configuration][0])
+            expect(round_conf).to match_array(subject[:general_configuration][0][2])
           end
 
           it 'should contain the ids of the users provided, without repetition' do
@@ -204,7 +204,7 @@ RSpec.describe PyramidGenerator do
             expect(subject[:general_configuration].empty?).to be_falsey
             subject[:general_configuration].each do |round|
               expect(round.empty?).to be_falsey
-              round.each do |match|
+              round[2].each do |match|
                 expect(match).to be_between(3, @board_mode)
               end
             end
@@ -217,12 +217,12 @@ RSpec.describe PyramidGenerator do
           it 'round 1 should have 1 match' do
             expect(subject[:general_configuration].empty?).to be_falsey
             subject[:general_configuration].each do |round|
-              expect(round.count).to eq(1)
+              expect(round[1]).to eq(1)
             end
           end
 
           it 'the match should have 4 participants' do
-            expect(subject[:general_configuration][0][0]).to eq(4)
+            expect(subject[:general_configuration][0][2]).to match_array([4])
           end
         end
 
@@ -240,7 +240,7 @@ RSpec.describe PyramidGenerator do
           end
 
           it 'should have the same number of matches as the first round of general_configuration' do
-            expect(subject[:first_round].count).to eq(subject[:general_configuration][0].count)
+            expect(subject[:first_round].count).to eq(subject[:general_configuration][0][1])
           end
 
           it "should have the same number of players in each match as indicated in the general_configuration" do
@@ -248,7 +248,7 @@ RSpec.describe PyramidGenerator do
             subject[:first_round].each do |match|
               round_conf.push(match.count)
             end
-            expect(round_conf).to match_array(subject[:general_configuration][0])
+            expect(round_conf).to match_array(subject[:general_configuration][0][2])
           end
 
           it 'should contain the ids of the users provided, without repetition' do
@@ -447,24 +447,24 @@ RSpec.describe PyramidGenerator do
             expect(subject[:general_configuration].empty?).to be_falsey
             subject[:general_configuration].each do |round|
               expect(round.empty?).to be_falsey
-              round.each do |match|
+              round[2].each do |match|
                 expect(match).to be_between(3, @board_mode)
               end
             end
           end
 
           it 'should have 2 round' do
-            expect(subject[:general_configuration].count).to eq(1)
+            expect(subject[:general_configuration].count).to eq(2)
           end
 
           context 'round 1' do
             it 'should have 3 matches' do
               expect(subject[:general_configuration].empty?).to be_falsey
-              expect(subject[:general_configuration][0].count).to eq(3)
+              expect(subject[:general_configuration][0][1]).to eq(3)
             end
 
             it 'should have all matches with 3 players' do
-              subject[:general_configuration][0].each do |match|
+              subject[:general_configuration][0][2].each do |match|
                 expect(match).to eq(3)
               end
             end
@@ -473,12 +473,11 @@ RSpec.describe PyramidGenerator do
           context 'round 2' do
             it 'should have 1 matches' do
               expect(subject[:general_configuration].empty?).to be_falsey
-              expect(subject[:general_configuration][1].count).to eq(1)
+              expect(subject[:general_configuration][1][1]).to eq(1)
             end
 
             it 'should have all matches with 3 players' do
-              expect(subject[:general_configuration].empty?).to be_falsey
-              expect(subject[:general_configuration][1][0]).to eq(3)
+              expect(subject[:general_configuration][1][2]).to match_array([3])
             end
           end
         end
@@ -497,7 +496,7 @@ RSpec.describe PyramidGenerator do
           end
 
           it 'should have the same number of matches as the first round of general_configuration' do
-            expect(subject[:first_round].count).to eq(subject[:general_configuration][0].count)
+            expect(subject[:first_round].count).to eq(subject[:general_configuration][0][1])
           end
 
           it "should have the same number of players in each match as indicated in the general_configuration" do
@@ -505,7 +504,7 @@ RSpec.describe PyramidGenerator do
             subject[:first_round].each do |match|
               round_conf.push(match.count)
             end
-            expect(round_conf).to match_array(subject[:general_configuration][0])
+            expect(round_conf).to match_array(subject[:general_configuration][0][2])
           end
 
           it 'should contain the ids of the users provided, without repetition' do
@@ -568,38 +567,36 @@ RSpec.describe PyramidGenerator do
             expect(subject[:general_configuration].empty?).to be_falsey
             subject[:general_configuration].each do |round|
               expect(round.empty?).to be_falsey
-              round.each do |match|
+              round[2].each do |match|
                 expect(match).to be_between(3, @board_mode)
               end
             end
           end
 
           it 'should have 2 round' do
-            expect(subject[:general_configuration].count).to eq(1)
+            expect(subject[:general_configuration].count).to eq(2)
           end
 
           context 'round 1' do
             it 'should have 4 matches' do
               expect(subject[:general_configuration].empty?).to be_falsey
-              expect(subject[:general_configuration][0].count).to eq(4)
+              expect(subject[:general_configuration][0][1]).to eq(4)
             end
 
             it 'should have all matches with 4 players' do
-              subject[:general_configuration][0].each do |match|
-                expect(match).to eq(4)
-              end
+              expect(subject[:general_configuration][0][2]).to match_array([4, 4, 4, 4])
             end
           end
 
           context 'round 2' do
             it 'should have 1 matches' do
               expect(subject[:general_configuration].empty?).to be_falsey
-              expect(subject[:general_configuration][1].count).to eq(1)
+              expect(subject[:general_configuration][1][1]).to eq(1)
             end
 
             it 'should have all matches with 4 players' do
               expect(subject[:general_configuration].empty?).to be_falsey
-              expect(subject[:general_configuration][1][0]).to eq(4)
+              expect(subject[:general_configuration][1][2]).to match_array([4])
             end
           end
         end
@@ -618,7 +615,7 @@ RSpec.describe PyramidGenerator do
           end
 
           it 'should have the same number of matches as the first round of general_configuration' do
-            expect(subject[:first_round].count).to eq(subject[:general_configuration][0].count)
+            expect(subject[:first_round].count).to eq(subject[:general_configuration][0][1])
           end
 
           it "should have the same number of players in each match as indicated in the general_configuration" do
@@ -626,7 +623,7 @@ RSpec.describe PyramidGenerator do
             subject[:first_round].each do |match|
               round_conf.push(match.count)
             end
-            expect(round_conf).to match_array(subject[:general_configuration][0])
+            expect(round_conf).to match_array(subject[:general_configuration][0][2])
           end
 
           it 'should contain the ids of the users provided, without repetition' do

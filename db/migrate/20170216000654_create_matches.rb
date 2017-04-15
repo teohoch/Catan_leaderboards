@@ -8,8 +8,10 @@ class CreateMatches < ActiveRecord::Migration[5.0]
       t.date :date
       t.string :location
       t.boolean :validated, null: false, default: false
+      t.integer :consumer_id, null: true, index: true
 
       t.timestamps
     end
+    add_foreign_key :matches, :matches, column: :consumer_id
   end
 end

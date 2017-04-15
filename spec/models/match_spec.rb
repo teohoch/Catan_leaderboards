@@ -56,6 +56,103 @@ describe Match, :type => :model do
     expect(valid_user_matches).to eq(n_valid)
   end
 
+  describe 'Valid Factory' do
+
+    context 'for basic default match' do
+
+      subject{FactoryGirl.create(:match)}
+
+      it 'should have a valid factory' do
+        expect(subject).to be_valid
+      end
+      it 'should have 4 assigned players' do
+        expect(subject.users.count).to eq(4)
+      end
+
+      it 'should have valid players assigned' do
+        subject.users.each do |user|
+          expect(user).to be_valid
+        end
+      end
+
+      it 'should not have a tournament assigned' do
+        expect(subject.tournament).to be_nil
+      end
+      it 'should not feed any other match' do
+        expect(subject.consumer).to be_nil
+      end
+    end
+
+    context 'for basic match without players' do
+
+      subject{FactoryGirl.create(:match, number_players: 0)}
+
+      it 'should have a valid factory' do
+        expect(subject).to be_valid
+      end
+      it 'should not have assigned players' do
+        expect(subject.users).to be_empty
+      end
+      it 'should not have a tournament assigned' do
+        expect(subject.tournament).to be_nil
+      end
+      it 'should not feed any other match' do
+        expect(subject.consumer).to be_nil
+      end
+    end
+
+    context 'for basic match with 3 players' do
+
+      subject{FactoryGirl.create(:match, number_players: 3)}
+
+      it 'should have a valid factory' do
+        expect(subject).to be_valid
+      end
+      it 'should have 3 assigned players' do
+        expect(subject.users.count).to eq(3)
+      end
+
+      it 'should have valid players assigned' do
+        subject.users.each do |user|
+          expect(user).to be_valid
+        end
+      end
+
+      it 'should not have a tournament assigned' do
+        expect(subject.tournament).to be_nil
+      end
+      it 'should not feed any other match' do
+        expect(subject.consumer).to be_nil
+      end
+    end
+
+    context 'for basic match with 4 players' do
+
+      subject{FactoryGirl.create(:match, number_players: 4)}
+
+      it 'should have a valid factory' do
+        expect(subject).to be_valid
+      end
+      it 'should have 4 assigned players' do
+        expect(subject.users.count).to eq(4)
+      end
+
+      it 'should have valid players assigned' do
+        subject.users.each do |user|
+          expect(user).to be_valid
+        end
+      end
+
+      it 'should not have a tournament assigned' do
+        expect(subject.tournament).to be_nil
+      end
+      it 'should not feed any other match' do
+        expect(subject.consumer).to be_nil
+      end
+    end
+
+  end
+
 
   it 'should Validate match' do
     match = FactoryGirl.create(:match, n_valids: 2)

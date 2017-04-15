@@ -100,6 +100,15 @@ bower.json
 .byebug_history
 
 # End of https://www.gitignore.io/api/rubymine,rails
+/.idea/
+.idea/inspectionProfiles/
+.idea/runConfigurations/All_specs_in_spec__Catan_leaderboards.xml
+.idea/runConfigurations/Run_spec__match_spec___Catan_leaderboards.xml
+.idea/runConfigurations/Run_spec__tournament_spec___Catan_leaderboards.xml
+.idea/runConfigurations/Tournament_Start_the_tournament_in_free4all_mode_with_8_participants_and_2_rounds__Catan_leaderboards.xml
+.idea/runConfigurations/Tournament_Start_the_tournament_in_free4all_mode_with_8_participants_and_2_rounds_should_not_have_more_than_2_similarities_between_matches__Catan_leaderboards.xml
+.idea/runConfigurations/Tournament_Start_the_tournament_in_pyramidal_mode__with_8_participants__Catan_leaderboards.xml
+
 !/.rspec
 /doc/rdoc/
 .idea/

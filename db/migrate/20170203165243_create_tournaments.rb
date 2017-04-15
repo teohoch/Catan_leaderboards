@@ -15,6 +15,7 @@ class CreateTournaments < ActiveRecord::Migration[5.0]
       t.integer :registered, null: false, default: 0
 
       t.references :officer, index: true, null: false, foreign_key: {to_table: :users}
+      t.json :structure
 
       t.timestamps
     end

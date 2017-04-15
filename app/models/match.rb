@@ -3,6 +3,7 @@ class Match < ApplicationRecord
   has_many :user_matches, dependent: :destroy
   has_many :users, through: :user_matches
   belongs_to :tournament
+  belongs_to :consumer, class_name: "Match"
   accepts_nested_attributes_for :user_matches
   validates :date, :location, client_presence: true
 

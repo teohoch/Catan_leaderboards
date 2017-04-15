@@ -42,12 +42,13 @@ FactoryGirl.define do
   factory :match, class: Match do
     transient do
       support Factory_Support.new
+      number_players 4
       n_valids 0
       use_existing_users false
     end
     location { Faker::Address.city }
     add_attribute(:date) { Faker::Date.between(2.days.ago, Date.tomorrow) }
-    n_players 4
+
 
     trait :existing_users do
       transient do
@@ -60,11 +61,11 @@ FactoryGirl.define do
     end
 
     after(:create) do |match, evaluator|
-      match.n_players.times do
+      evaluator.number_players.times do
         if evaluator.use_existing_users
-          create(:user_match, match: match, vp: evaluator.support.assign_vp(match.n_players, evaluator.n_valids), validated: evaluator.support.assign_valid(match.n_players, evaluator.n_valids), user: evaluator.support.assign_user(match.n_players, evaluator.n_valids))
+          create(:user_match, match: match, vp: evaluator.support.assign_vp(evaluator.number_players, evaluator.n_valids), validated: evaluator.support.assign_valid(evaluator.number_players, evaluator.n_valids), user: evaluator.support.assign_user(evaluator.number_players, evaluator.n_valids))
         else
-          create(:user_match, match: match, vp: evaluator.support.assign_vp(match.n_players, evaluator.n_valids), validated: evaluator.support.assign_valid(match.n_players, evaluator.n_valids))
+          create(:user_match, match: match, vp: evaluator.support.assign_vp(evaluator.number_players, evaluator.n_valids), validated: evaluator.support.assign_valid(evaluator.number_players, evaluator.n_valids))
         end
       end
     end

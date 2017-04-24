@@ -1,7 +1,8 @@
-require 'rails_helper'
-RSpec.describe PyramidGenerator do
+require 'support/shared_examples_for_round'
 
-  shared_examples_for 'a correct success output object' do |users|
+describe PyramidGenerator do
+
+  shared_examples_for 'a correct success output object' do
     it 'should output status True' do
       expect(@result[:status]).to be_truthy
     end
@@ -54,7 +55,7 @@ RSpec.describe PyramidGenerator do
 
           it 'should have a numer_of_matches key' do
             subject[:general_configuration].each do |_, content|
-              expect(content).to have_key :number_of_matches_key
+              expect(content).to have_key :number_of_matches
             end
           end
 
@@ -113,7 +114,7 @@ RSpec.describe PyramidGenerator do
         expect(subject[:first_round]).not_to be_empty
         used_ids = subject[:first_round].flatten
 
-        users.each do |user|
+        @users.each do |user|
           expect(used_ids.count(user)).to eq(1)
         end
 
@@ -133,7 +134,7 @@ RSpec.describe PyramidGenerator do
     it 'should output Argument error with minimum participants message' do
       found = false
       @result[:errors].each do |error|
-        if error.is_a?(ArgumentError) && error.message == I18n.t('pyramid_generator.minimum_participants')
+        if error.is_a?(ArgumentError) && (error.message == I18n.t('pyramid_generator.minimum_participants') || error.message == I18n.t('pyramid_generator.invalid_parameter_combination'))
           found = true
           break
         end
@@ -144,10 +145,6 @@ RSpec.describe PyramidGenerator do
     it 'should output a null object' do
       expect(@result[:object]).to be_nil
     end
-
-  end
-
-  shared_examples_for ' a round' do |configuration|
 
   end
 
@@ -187,11 +184,15 @@ RSpec.describe PyramidGenerator do
 
         subject { @result[:object] }
 
-        it_behaves_like 'a correct success output object', @users
+        it_should_behave_like 'a correct success output object', @users
 
-        it 'should have 1 round'
-        it 'round 1 should have 1 match'
-        it 'round 1, match 1 should have 3 participants'
+        it 'should have 1 round' do
+          expect(subject[:general_configuration].keys.count).to eq(1)
+        end
+
+        context 'Round 1' do
+          it_should_behave_like 'a round', 0, 1, [3]
+        end
 
       end
 
@@ -206,9 +207,13 @@ RSpec.describe PyramidGenerator do
 
         it_behaves_like 'a correct success output object', @users
 
-        it 'should have 1 round'
-        it 'round 1 should have 1 match'
-        it 'round 1, match 1 should have 4 participants'
+        it 'should have 1 round' do
+          expect(subject[:general_configuration].keys.count).to eq(1)
+        end
+
+        context 'Round 1' do
+          it_should_behave_like 'a round', 0, 1, [4]
+        end
 
       end
 
@@ -268,23 +273,12 @@ RSpec.describe PyramidGenerator do
         end
 
         context 'Round 1' do
-          it 'should have 3 matches' do
-            expect(subject[:general_configuration][0][:number_of_matches]).to eq(3)
-          end
-          it 'should have a match configuration of 3-3-3' do
-            expect(subject[:general_configuration][0][:matches_configuration]).to match_array([3,3,3])
-          end
+          it_should_behave_like 'a round', 0, 3, [3, 3, 3]
         end
 
         context 'Round 2' do
-          it 'should have 1 matches' do
-            expect(subject[:general_configuration][0][:number_of_matches]).to eq(1)
-          end
-          it 'should have a match configuration of 3' do
-            expect(subject[:general_configuration][0][:matches_configuration]).to match_array([3])
-          end
+          it_should_behave_like 'a round', 1, 1, [3]
         end
-
 
       end
 
@@ -304,21 +298,11 @@ RSpec.describe PyramidGenerator do
         end
 
         context 'Round 1' do
-          it 'should have 4 matches' do
-            expect(subject[:general_configuration][0][:number_of_matches]).to eq(4)
-          end
-          it 'should have a match configuration of 4-4-4-4' do
-            expect(subject[:general_configuration][0][:matches_configuration]).to match_array([4-4-4-4])
-          end
+          it_should_behave_like 'a round', 0, 4, [4, 4, 4, 4]
         end
 
         context 'Round 2' do
-          it 'should have 3 matches' do
-            expect(subject[:general_configuration][0][:number_of_matches]).to eq(1)
-          end
-          it 'should have a match configuration of 3' do
-            expect(subject[:general_configuration][0][:matches_configuration]).to match_array([4])
-          end
+          it_should_behave_like 'a round', 1, 1, [4]
         end
 
       end

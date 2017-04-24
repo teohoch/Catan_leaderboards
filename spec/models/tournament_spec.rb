@@ -1,9 +1,23 @@
+shared_examples_for 'valid started tournament' do
+  it 'should be valid' do
+    expect(@tournament).to be_valid
+  end
+
+  it 'should return status true' do
+    expect(@result[:status]).not_to be_truthy
+  end
+
+  it 'should not return invalid configuration errors' do
+    expect(@result[:errors]).to be_empty
+  end
+end
 
 describe Tournament, :type => :model do
   it "should have method start" do
     tournament = FactoryGirl.create(:tournament)
     expect(tournament).to respond_to :start
   end
+
   describe 'Valid Factory' do
     context 'for a basic tournament' do
       it 'should have a valid factory' do
@@ -42,10 +56,10 @@ describe Tournament, :type => :model do
 
         it 'should have 8 inscriptions' do
           expect(@tournament.registered).to eq(8)
+          expect(@tournament.inscriptions.count).to eq(8)
         end
 
         it 'should have valid inscriptions' do
-          expect(@tournament.inscriptions.count).to eq(8)
           @tournament.inscriptions.each do |inscription|
             expect(inscription).to be_valid
           end
@@ -220,23 +234,100 @@ describe Tournament, :type => :model do
       end
     end
 
-    context 'in pyramidal mode  with 8 participants' do
-      before(:all) do
-        @tournament = FactoryGirl.create(:tournament, :with_inscriptions, :pyramidal, number_players: 8, n_registered: 8)
-        @result = @tournament.start
-        @tournament.reload
+    context 'in pyramidal mode' do
+      context 'with 8 participants' do
+        before(:all) do
+          @tournament = FactoryGirl.create(:tournament, :with_inscriptions, :pyramidal, number_players: 8, n_registered: 8)
+          @result = @tournament.start
+          @tournament.reload
+        end
+
+        it 'should be valid' do
+          expect(@tournament).to be_valid
+        end
+
+        it "should return status false" do
+          expect(@result[:status]).not_to be_truthy
+        end
+
+        it "should return invalid configuration errors" do
+          expect(@result[:errors]).not_to be_empty
+        end
       end
 
-      it 'should be valid' do
-        expect(@tournament).to be_valid
+      context 'with 9 participants' do
+        before(:all) do
+          @tournament = FactoryGirl.create(:tournament, :with_inscriptions, :pyramidal, number_players: 9, n_registered: 9)
+          @result = @tournament.start
+          @tournament.reload
+        end
+
+        describe 'Structure' do
+          subject {@tournament.structure}
+          it 'should not be nil' do
+            expect(subject).not_to be_nil
+          end
+
+          it 'should not be empty' do
+            expect(subject).not_to be_empty
+          end
+
+          it 'should be a Hash' do
+            expect(subject).to be_a Hash
+          end
+
+          it 'should have a numeric keys' do
+            expect(subject.keys).to all(match('\d+'))
+          end
+          it 'should have 2 round' do
+            expect(subject.keys.count).to eq(2)
+          end
+          describe 'Round 1' do
+            it_should_behave_like 'a round', 0, 3, [3, 3, 3]
+          end
+          describe 'Round 2' do
+            it_should_behave_like 'a round', 1, 1, [3]
+          end
+        end
+        describe 'Associated Matches' do
+          it_should_behave_like 'Associated Matches', {0 => {:number_of_matches => 3, :matches_configuration => [3, 3, 3]}, 1 => {:number_of_matches => 1, :matches_configuration => [3]}}, 4
+        end
       end
 
-      it "should return status true" do
-        expect(@result[:status]).to be_truthy
-      end
+      context 'with 16 participants' do
+        before(:all) do
+          @tournament = FactoryGirl.create(:tournament, :with_inscriptions, :pyramidal, number_players: 16, n_registered: 16)
+          @result = @tournament.start
+          @tournament.reload
+        end
 
-      it "should not return any errors" do
-        expect(@result[:errors].empty?).to be_truthy
+        describe 'Structure' do
+          subject {@tournament.structure}
+          it 'should not be nil' do
+            expect(subject).not_to be_nil
+          end
+
+          it 'should not be empty' do
+            expect(subject).not_to be_empty
+          end
+
+          it 'should be a Hash' do
+            expect(subject).to be_a Hash
+          end
+
+          it 'should have a numeric keys' do
+            expect(subject.keys).to all(match('\d+'))
+          end
+          it 'should have 2 round' do
+            expect(subject.keys.count).to eq(2)
+          end
+          describe 'Round 1' do
+            it_should_behave_like 'a round', 0, 4, [4, 4, 4, 4]
+          end
+          describe 'Round 2' do
+            it_should_behave_like 'a round', 1, 1, [4]
+          end
+        end
       end
 
 

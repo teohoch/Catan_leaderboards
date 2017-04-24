@@ -4,8 +4,11 @@ class Match < ApplicationRecord
   has_many :users, through: :user_matches
   belongs_to :tournament
   belongs_to :consumer, class_name: "Match"
+  has_many :feeders, class_name: "Match", foreign_key: 'consumer_id'
   accepts_nested_attributes_for :user_matches
   validates :date, :location, client_presence: true
+
+  scope :round, -> (round) {where(round: round)}
 
   def validated_human
     if self.validated
@@ -110,13 +113,18 @@ class Match < ApplicationRecord
   end
 
   def self.new_with_child(match_params)
+    #TODO rework this shit, and make tests!
     success = true
     error_list = []
 
-    match = Match.new(:date => match_params[:date],
-                      :location => match_params[:location],
-                      :tournament_id => (match_params.key?(:tournament_id) ? match_params[:tournament_id] : nil),
-                      :round => match_params[:round])
+    match = Match.new(
+        :date => match_params[:date],
+        :location => match_params[:location],
+        :tournament_id => (match_params.key?(:tournament_id) ? match_params[:tournament_id] : nil),
+        :consumer_id => (match_params.key?(:consumer_id) ? match_params[:consumer_id] : nil),
+        :round => match_params[:round],
+        :pyramidal_position => (match_params.key?(:pyramidal_position) ? match_params[:pyramidal_position] : nil),
+        :expected_number_players => (match_params.key?(:expected_number_players) ? match_params[:expected_number_players] : match_params[:user_matches_attributes].count))
 
 
     n_valid = 0

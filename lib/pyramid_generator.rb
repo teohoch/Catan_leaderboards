@@ -14,8 +14,8 @@ class PyramidGenerator
         errors.push(ArgumentError.new(I18n.t('pyramid_generator.minimum_participants')))
       when 0
         object = {
-            :general_configuration => result[:rounds].reverse,
-            :first_round => self.first_round_assigner(result[:rounds].last[2], player_ids)}
+            :general_configuration => result[:rounds],
+            :first_round => self.first_round_assigner(result[:rounds][0][:matches_configuration], player_ids)}
       else
         status = false
         errors.push(ArgumentError.new(I18n.t('pyramid_generator.invalid_parameter_combination')))
@@ -31,16 +31,17 @@ class PyramidGenerator
   # @param [Integer] round The current round, counting from 0
   # @return [Hash] opts
   # @option opts [Integer] :status The status of the operation. -2 is minimum of players not met, -1 is a invalid configuration and 0 is a successful operation
-  # @option opts [Array<[Integer,Integer,Array<Integer>]>] :rounds Returns an array of Rounds, which are an Array in the form [Round_number,Number of matches in round ,Array<Number of players in match>]>
+  # @option opts Hash  :rounds Returns a Hash of Rounds
+
   def self.generator(board_mode, n_winners, players, round=0) #:doc:
-    output = {:status => nil, :rounds => []}
+    output = {:status => nil, :rounds => {}}
     inf = 1.0/0
     case players
       when -inf..2
         output[:status] = -2
       when 3..board_mode
         output[:status] = 0
-        output[:rounds].push([round, 1, [players]])
+        output[:rounds][round] = {:number_of_matches => 1, :matches_configuration => [players]}
       else
         flag = false
         lower_bound = (players.to_f/board_mode).ceil
@@ -85,8 +86,8 @@ class PyramidGenerator
             next_recursion = self.generator(board_mode, n_winners, n_winners*number_of_matches, round + 1)
             if next_recursion[:status] == 0
               output[:status] = 0
-              output[:rounds].concat(next_recursion[:rounds])
-              output[:rounds].push([round, number_of_matches, current_round])
+              output[:rounds].merge!(next_recursion[:rounds])
+              output[:rounds][round] = {:number_of_matches => number_of_matches, :matches_configuration => current_round}
               flag = true
               break
             end

@@ -29,15 +29,16 @@ ActiveRecord::Schema.define(version: 20170216021751) do
 
   create_table "matches", force: :cascade do |t|
     t.integer  "tournament_id"
-    t.integer  "n_players",          default: 0,     null: false
+    t.integer "n_players", default: 0, null: false
+    t.integer "expected_number_players"
     t.integer  "round"
     t.integer  "pyramidal_position"
     t.date     "date"
     t.string   "location"
-    t.boolean  "validated",          default: false, null: false
+    t.boolean "validated", default: false, null: false
     t.integer  "consumer_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["consumer_id"], name: "index_matches_on_consumer_id", using: :btree
     t.index ["tournament_id"], name: "index_matches_on_tournament_id", using: :btree
   end
@@ -56,6 +57,7 @@ ActiveRecord::Schema.define(version: 20170216021751) do
     t.boolean  "must_end_round", default: true, null: false
     t.integer  "registered",     default: 0,    null: false
     t.integer  "officer_id",                    null: false
+    t.json "structure"
     t.datetime "created_at",                    null: false
     t.datetime "updated_at",                    null: false
     t.index ["officer_id"], name: "index_tournaments_on_officer_id", using: :btree

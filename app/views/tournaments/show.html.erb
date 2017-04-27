@@ -7,39 +7,22 @@
 
   </thead>
   <tbody>
-    <% @tournament.attributes.each do |attribute_name, attribute_value| %>
-      <% unless %w(id created_at updated_at).include? attribute_name %>
-        <tr>
-          <% case %>
-          <% when attribute_name == 'user_id' %>
-              <td><%= Tournament.human_attribute_name(:user) %></td>
-              <td><%= @tournament.user.name %></td>
-          <% when attribute_name == 'mode' %>
-              <td><%= Tournament.human_attribute_name(:general_mode) %></td>
-              <td><%= @tournament.general_mode_human %></td>
-          <% when attribute_name == 'status' %>
-              <td><%= Tournament.human_attribute_name(:status) %></td>
-              <td><%= @tournament.status_human %></td>
-          <% when attribute_name == 'entrance_fee' %>
-              <td><%= Tournament.human_attribute_name(:entrance_fee) %></td>
-              <td><%= number_to_currency(@tournament.entrance_fee, precision: (t 'currency_precision')) %></td>
-          <% else %>
-              <td> <%= Tournament.human_attribute_name(attribute_name) %> </td>
-              <td> <%= attribute_value %> </td>
-          <% end %>
-        </tr>
-      <% end %>
+  <% @tournament.presentable_attributes.each do |attribute_name| %>
+      <tr>
+        <td> <%= Tournament.human_attribute_name(attribute_name) %> </td>
+        <td> <%= @tournament.send(attribute_name) %> </td>
+      </tr>
     <% end %>
   </tbody>
 </table>
 
-<% if @tournament.status != 0 %>
+<% if @tournament.raw_status != 0 %>
     <% if @tournament.mode == 0 %>
         <h3>Partidas del Torneo</h3>
         <% @tournament.rounds.times do |round| %>
             <h4>Ronda <%= round+1 %></h4>
             <div class="row">
-              <% @tournament.matches.where(:round => (round+1)).each_with_index do |match, index| %>
+              <% @tournament.matches.round(round+1).each_with_index do |match, index| %>
                   <div class="col-md-4">
                     <table class="display table table-condensed table-responsive">
                       <caption>
@@ -74,32 +57,21 @@
 <% end %>
 
 <div class="row">
-  <% if can? :update, @tournament %>
+  <% if can? :update, @tournament.raw_model %>
       <div class="col-md-1">
-        <%= link_to (t 'edit'), edit_tournament_path(@tournament), class: 'btn btn-info' %>
+        <%= link_to (t 'edit'), edit_tournament_path(@tournament.raw_model), class: 'btn btn-info' %>
       </div>
   <% end %>
-  <% if can? :start, @tournament %>
+  <% if can? :start, @tournament.raw_model %>
       <div class="col-md-1">
-        <%= simple_form_for @tournament, :url => start_tournament_path(@tournament), :method => :post do |f| %>
+        <%= simple_form_for @tournament.raw_model, :url => start_tournament_path(@tournament.raw_model), :method => :post do |f| %>
             <%= f.button :submit_tag, (t 'start'), :class => 'btn btn-info' %>
         <% end %>
       </div>
   <% end %>
-  <% unless current_user.nil? %>
-      <% if @registrable %>
-          <div class="col-md-2 center-block">
-            <%= simple_form_for(@inscription) do |f| %>
-                <%= f.input :tournament_id, as: :hidden, :input_html => {:value => @tournament.id} %>
-                <%= f.button :submit_tag, (t 'register'), :class => 'btn btn-success' %>
-            <% end %>
-          </div>
-      <% elsif @tournament.status==0 and not @registrable %>
-          <div class="col-md-2 center-block">
-            <%= link_to (t 'unregister'), @inscription, method: :delete, data: {confirm: (t 'are_you_sure')}, class: 'btn btn-success' %>
-          </div>
-      <% end %>
-  <% end %>
+
+  <%= @tournament.inscription_button(current_user) %>
+
 
   <div class="col-md-1">
     <%= link_to (t 'back'), tournaments_path, class: 'btn btn-danger' %>

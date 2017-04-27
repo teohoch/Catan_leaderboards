@@ -1,12 +1,22 @@
 FactoryGirl.define do
   factory :tournament, class: Tournament do
-    name 'Annual Tournament'
-    number_players 4
+    name {Faker::StarWars.planet + ' Annual Tournament'}
+    number_players 9
     prize { Faker::StarWars.vehicle }
     entrance_fee { Faker::Number.number(4) }
     date { Date.today }
     association :officer, factory: :user, strategy: :create
     rounds 0
+
+    transient do
+      available_users []
+    end
+
+    trait :with_users do
+      transient do
+        with_users true
+      end
+    end
 
     trait :with_inscriptions do
       transient do
@@ -14,7 +24,11 @@ FactoryGirl.define do
 
         after(:create) do |tournament, evaluator|
           evaluator.n_registered.times do
-            user = create(:user)
+            if evaluator.with_users
+              user = evaluator.available_users.pop
+            else
+              user = create(:user)
+            end
             create(:inscription, user_id: user.id, tournament_id: tournament.id)
           end
         end

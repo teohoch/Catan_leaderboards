@@ -56,7 +56,7 @@ gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
 gem 'bootstrap-datepicker-rails'
 gem 'faker'
 
-
+gem 'draper', '3.0.0.pre1'
 
 
 group :development, :test do

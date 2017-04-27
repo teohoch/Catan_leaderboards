@@ -1,22 +1,17 @@
 class TournamentsController < ApplicationController
-  before_action :set_tournament, only: [:show, :edit, :update, :destroy, :start]
+  before_action :set_tournament, only: [:edit, :update, :destroy, :start]
   load_and_authorize_resource
 
   # GET /tournaments
   # GET /tournaments.json
   def index
-    @tournaments = Tournament.all
+    @tournaments = Tournament.all.decorate
   end
 
   # GET /tournaments/1
   # GET /tournaments/1.json
   def show
-    @registrable = current_user.nil? ? false : (@tournament.inscriptions.find_by(:user_id => current_user.id).nil? and @tournament[:status]==0)
-    if @registrable
-      @inscription = Inscription.new(:tournament_id=> @tournament.id)
-    else
-      @inscription = current_user.nil? ? false : @tournament.inscriptions.find_by(:user_id => current_user.id)
-    end
+    @tournament = Tournament.find(params[:id]).decorate
   end
 
   # GET /tournaments/new
@@ -91,7 +86,7 @@ class TournamentsController < ApplicationController
         format.json { render :show, status: :created, location: @tournament }
       else
         status[:errors].each do |error|
-          flash_message(:error, error)
+          helpers.flash_message(:error, error)
         end
         format.html { redirect_to @tournament }
         format.json { render json: error, status: :unprocessable_entity }

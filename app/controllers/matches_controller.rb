@@ -39,7 +39,7 @@ class MatchesController < ApplicationController
         format.html { redirect_to success[:object], notice: 'Match was successfully created.' }
         format.json { render :show, status: :created, location: @match }
       else
-        flash_message(:error, success[:errors])
+        helpers.flash_message(:error, success[:errors])
         format.html { render :new }
         format.json { render json: success[:errors], status: :unprocessable_entity }
       end

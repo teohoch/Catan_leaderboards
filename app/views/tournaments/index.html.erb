@@ -5,7 +5,7 @@
   <thead>
     <tr>
       <th> <%= Tournament.human_attribute_name(:name) %>  </th>
-      <th> <%= Tournament.human_attribute_name(:general_mode) %>  </th>
+      <th> <%= Tournament.human_attribute_name(:mode) %>  </th>
       <th><%= Tournament.human_attribute_name(:number_players) %></th>
       <th><%= Tournament.human_attribute_name(:prize) %></th>
       <th><%= Tournament.human_attribute_name(:entrance_fee) %></th>
@@ -21,17 +21,17 @@
     <% @tournaments.each do |tournament| %>
       <tr>
         <td><%= tournament.name %></td>
-        <td><%= tournament.general_mode_human %></td>
+        <td><%= tournament.mode %></td>
         <td><%= tournament.number_players %></td>
         <td><%= tournament.prize %></td>
         <td><%= number_to_currency(tournament.entrance_fee, precision: (t 'currency_precision')) %></td>
-        <td><%= tournament.officer.name %></td>
+        <td><%= tournament.officer %></td>
         <td><%= link_to (t 'show'), tournament %></td>
         <td>
-          <% if can? :update, tournament %><%= link_to (t 'edit'), edit_tournament_path(tournament) %>
+          <% if can? :update, tournament.raw_model %><%= link_to (t 'edit'), edit_tournament_path(tournament) %>
           <% end %></td>
         <td>
-          <% if can? :destroy, tournament %><%= link_to (t 'destroy'), tournament, method: :delete, data: {confirm: 'Are you sure?'} %>
+          <% if can? :destroy, tournament.raw_model %><%= link_to (t 'destroy'), tournament, method: :delete, data: {confirm: 'Are you sure?'} %>
           <% end %></td>
       </tr>
     <% end %>

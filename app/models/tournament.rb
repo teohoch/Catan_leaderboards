@@ -10,48 +10,6 @@ class Tournament < ApplicationRecord
   validates :number_players, inclusion: {in: 3..16 }
   validates :mode, inclusion: { in: -1..5}
 
-  def general_mode_human
-    if self.mode == -1
-      I18n.t 'tournamet_modes.free4all'
-    else
-      I18n.t 'tournamet_modes.pyramidal'
-    end
-  end
-
-  def status_human
-    case self.status
-      when 0
-        I18n.t 'register_phase'
-      when 1
-        I18n.t 'ongoing'
-      when 2
-        I18n.t 'finalized'
-      else
-        I18n.t 'invalid'
-    end
-  end
-
-  def mode_human
-    case self.mode
-      when -1
-        I18n.t 'tournamet_modes.free4all'
-      when 0
-        I18n.t 'tournamet_modes.instantwinner'
-      when 1
-        I18n.t 'tournamet_modes.onewinner'
-      when 2
-        I18n.t 'tournamet_modes.twowinner'
-      when 3
-        I18n.t 'tournamet_modes.threewinner'
-      when 4
-        I18n.t 'tournamet_modes.fourwinner'
-      when 5
-        I18n.t 'tournamet_modes.fivewinner'
-      else
-        I18n.t 'invalid'
-    end
-  end
-
   def start
 
     result = (self.mode ==-1) ? start_free4all : start_pyramidal
@@ -184,9 +142,7 @@ class Tournament < ApplicationRecord
                 errors.push(ArgumentError.new)
               end
             end
-
           end
-
         end
         previous_round_ids = current_round_ids
         all_rounds_created.concat(current_round_ids)
@@ -195,6 +151,9 @@ class Tournament < ApplicationRecord
     else
       status = false
       errors = selector[:errors]
+    end
+    if status
+      self.rounds = self.structure.count
     end
     {:status => status, :errors => errors, :object => status ? object : nil}
   end

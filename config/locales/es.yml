@@ -85,10 +85,13 @@ es:
           date: "Fecha de Inicio"
           user: "Encargado"
           rounds: "N° de Rondas"
-          general_mode: "Modalidad de Torneo"
+          mode: "Modalidad de Torneo"
+          winning_mode: "Modalidad de Victoria"
           status: "Estado"
           board_size: "Tamaño del Tablero"
           registered: "Jugadores Inscritos"
+          current_round: "Ronda Actual"
+          officer: "Encargado"
         match:
           n_players: "N° de Jugadores"
           round: "Ronda"
@@ -171,7 +174,7 @@ es:
 
   tournamet_modes:
     free4all: "Victoria por Ranking"
-    pyramidal: "Torneo Piramidal"
+    pyramidal: "Torneo por Eliminatorias"
     not_allowed: "Esta configuracion no esta permitida, elija otro numero de participantes."
     instantwinner: "Victoria inmediata"
     onewinner: "Pasa uno"

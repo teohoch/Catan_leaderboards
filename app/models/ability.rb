@@ -32,8 +32,14 @@ class Ability
 
     can :read, Tournament
     can :create, Tournament
-    can :update, Tournament, :officer_id => user.id
+    can :update, Tournament, :officer_id => user.id, :status => 0
     can :destroy, Tournament, :officer_id => user.id
+    can :register, Tournament do |tournament|
+      tournament.inscriptions.find_by(:user_id => user.id).nil? and tournament.status==0
+    end
+    can :unregister, Tournament do |tournament|
+      tournament.status==0 and not tournament.inscriptions.find_by(:user_id => user.id).nil?
+    end
     can :start, Tournament, :officer_id => user.id, :status => 0
     can :end, Tournament, :officer_id => user.id, :status => 1
 

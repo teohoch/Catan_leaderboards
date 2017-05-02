@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: Catan_leaderboards_production
-  username: Catan_leaderboards
+  username: rails-user
   password: <%= ENV['CATAN_LEADERBOARDS_DATABASE_PASSWORD'] %>

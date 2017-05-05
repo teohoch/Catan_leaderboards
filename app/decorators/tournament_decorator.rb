@@ -1,7 +1,7 @@
 class TournamentDecorator < ApplicationDecorator
   delegate_all
 
-  def presentable_attributes
+  def attributes
     base = ['name', 'number_players', 'prize', 'entrance_fee', 'date', 'status', 'mode', 'winning_mode', 'rounds', 'current_round', 'board_size', 'registered', 'officer']
 
 
@@ -14,7 +14,7 @@ class TournamentDecorator < ApplicationDecorator
     unless model.mode >=0
       base.delete('winning_mode')
     end
-    base
+    base.map{|key| [key, self.send(key)]}
   end
 
   def mode
@@ -95,6 +95,28 @@ class TournamentDecorator < ApplicationDecorator
       end
     end
   end
+
+  def pretty_show
+    super(title: h.t('tournament.show.table_name'))
+  end
+
+  def show_info
+    if model.status != 0
+      if model.mode == -1
+        ranking_rounds
+      else
+        nil
+      end
+    end
+  end
+
+  private
+
+    def ranking_rounds(title: h.t('tournament.show.rounds_title'))
+      if model.status != 0 and model.mode == -1
+        h.render partial: 'ranking_rounds', locals: {matches: model.matches, rounds: model.rounds, title: title}
+      end
+    end
 
 
 end

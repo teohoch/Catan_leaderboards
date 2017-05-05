@@ -1,5 +1,6 @@
 class InscriptionsController < ApplicationController
   before_action :set_inscription, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /inscriptions
   # GET /inscriptions.json

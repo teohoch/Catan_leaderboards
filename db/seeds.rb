@@ -25,4 +25,4 @@ users = [fuser, fuser2].concat(FactoryGirl.create_list(:user, 10))
 
 tournament1 = FactoryGirl.create(:tournament, :pyramidal_1, :with_inscriptions, :with_users, available_users: users.slice(0..7), number_players: 8, n_registered: 8, officer: fuser)
 tournament2 = FactoryGirl.create(:tournament, :pyramidal_1, :with_inscriptions, :with_users, available_users: users.slice(0..8), number_players: 9, n_registered: 9, officer: fuser)
-tournament3 = FactoryGirl.create(:tournament, :free4all, :with_inscriptions, :with_users, available_users: users.slice(0..8), number_players: 9, n_registered: 9, officer: fuser)
+tournament3 = FactoryGirl.create(:tournament, :free4all, :with_inscriptions, :with_users, available_users: users.slice(0..8), number_players: 9, n_registered: 9, officer: fuser, rounds: 2)

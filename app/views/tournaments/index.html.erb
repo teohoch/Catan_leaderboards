@@ -24,7 +24,7 @@
         <td><%= tournament.mode %></td>
         <td><%= tournament.number_players %></td>
         <td><%= tournament.prize %></td>
-        <td><%= number_to_currency(tournament.entrance_fee, precision: (t 'currency_precision')) %></td>
+        <td><%= tournament.entrance_fee %></td>
         <td><%= tournament.officer %></td>
         <td><%= link_to (t 'show'), tournament %></td>
         <td>

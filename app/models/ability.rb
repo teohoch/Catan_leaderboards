@@ -35,16 +35,16 @@ class Ability
     can :update, Tournament, :officer_id => user.id, :status => 0
     can :destroy, Tournament, :officer_id => user.id
     can :register, Tournament do |tournament|
-      tournament.inscriptions.find_by(:user_id => user.id).nil? and tournament.status==0
+      tournament.inscriptions.find_by(:user_id => user.id).nil? and tournament.status==0 and user.new_record? == false
     end
     can :unregister, Tournament do |tournament|
-      tournament.status==0 and not tournament.inscriptions.find_by(:user_id => user.id).nil?
+      tournament.status==0 and not tournament.inscriptions.find_by(:user_id => user.id).nil?  and user.new_record? == false
     end
     can :start, Tournament, :officer_id => user.id, :status => 0
     can :end, Tournament, :officer_id => user.id, :status => 1
 
     can :read, Match
-    can :create, Match
+    can :create, Match, user.new_record? => true
     can :update, Match do |match|
       result = false
       unless match.validated
@@ -87,5 +87,11 @@ class Ability
       # TODO Revise these conditions
       (not participant.nil? and not local_validated and not match[:validated] and tournament_round and composition)
     end
+
+    can :read, Inscription
+    can :create, Inscription
+    can :destroy, Inscription
+    can :update, Inscription
+
   end
 end

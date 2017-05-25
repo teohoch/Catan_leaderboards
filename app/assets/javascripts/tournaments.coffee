@@ -9,14 +9,6 @@ jQuery ->
   max_players = false
   options = null
 
-  language = $('#tournaments').data('language')
-  $('#tournaments').dataTable(
-    {
-      "language": language,"jQueryUI": true
-    })
-
-
-
   options_remover = (selector, elements_delete) ->
     for elem in elements_delete
       $('#'+selector+' option[value="'+elem+'"]').remove()

@@ -24,7 +24,9 @@ es:
   succesfully_unsubscribed: "Desinscripcion realizada con exito."
   register: "Inscribirse"
   unregister: "Desinscribir"
-  are_you_sure: "¿Esta seguro que desea realizar esta accion?"
+  are_you_sure:
+    base:  "¿Esta seguro que desea realizar esta accion?"
+    delete: "¿Esta seguro que desea eliminar este %{klass} ?"
   positive: "Sí"
   negatory: "No"
   validate: "Validar"
@@ -46,8 +48,10 @@ es:
   start: "Iniciar"
   end: "Finalizar"
 
-  ended_f: "Finalizada"
-  ended_m: "Finalizado"
+  ended:
+      M: "Finalizada"
+      F: "Finalizado"
+
   waiting: "En espera"
 
   match_blank_error: "Los datos de la partida no pueden estar en blanco."
@@ -76,6 +80,7 @@ es:
           position_free: "Ranking Libre"
           position_tournament: "Ranking Torneos"
           matches_played: "Partidas Jugadas"
+          pronoun: "M"
 
         tournament:
           name: "Nombre"
@@ -92,17 +97,22 @@ es:
           registered: "Jugadores Inscritos"
           current_round: "Ronda Actual"
           officer: "Encargado"
+          pronoun: "M"
+
         match:
           n_players: "N° de Jugadores"
+          expected_number_players: "N° de jugadores esperados"
           round: "Ronda"
           pyramidal_position: "Posicion en la piramide"
           date: "Fecha"
           location: "Ubicacion"
           validated: "Validado"
+          pronoun: "M"
+
         user_match:
           user: "Jugador"
           vp: "Puntos de Victoria"
-
+          pronoun: "M"
 
 
       errors:
@@ -209,6 +219,8 @@ es:
       success: "Partida actualizada correctamente."
     validate:
       success: "Partida validada correctamente."
+    show:
+      table_title: "Datos del Torneo"
   user_match:
     update:
       success: "Relacion Usuario/Partida actualizada correctamente."
@@ -221,4 +233,12 @@ es:
     show:
       table_name: "Datos del Torneo"
       rounds_title: "Partidas del Torneo"
+      not_started: "No Iniciado"
+      finalized: "Finalizado"
   round: "Ronda"
+  decorator:
+    show: "Mostrar"
+    edit: "Editar"
+    delete: "Eliminar"
+    create: "Crear"
+  not_set: "-----"

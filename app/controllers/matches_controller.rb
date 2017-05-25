@@ -14,6 +14,7 @@ class MatchesController < ApplicationController
   # GET /matches/1
   # GET /matches/1.json
   def show
+    @match = @match.decorate
     @users = User.joins(:user_matches).select('users.*, user_matches.vp, user_matches.victory_position').where('user_matches.match_id' => @match.id)
     if can? :validate, @match
       @user_match = @match.user_matches.find_by(:user_id => current_user.id)

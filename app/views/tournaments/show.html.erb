@@ -4,11 +4,7 @@
 <%= @tournament.show_info %>
 
 <div class="row">
-  <% if can? :update, @tournament.raw_model %>
-      <div class="col-md-1">
-        <%= link_to (t 'edit'), edit_tournament_path(@tournament.raw_model), class: 'btn btn-info' %>
-      </div>
-  <% end %>
+  <%= @tournament.edit_button %>
   <% if can? :start, @tournament.raw_model %>
       <div class="col-md-1">
         <%= simple_form_for @tournament.raw_model, :url => start_tournament_path(@tournament.raw_model), :method => :post do |f| %>

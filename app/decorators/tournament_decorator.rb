@@ -4,12 +4,8 @@ class TournamentDecorator < ApplicationDecorator
   def attributes
     base = ['name', 'number_players', 'prize', 'entrance_fee', 'date', 'status', 'mode', 'winning_mode', 'rounds', 'current_round', 'board_size', 'registered', 'officer']
 
-
     if model.status < 1
       base.delete('rounds')
-    end
-    unless model.status == 1
-      base.delete('current_round')
     end
     unless model.mode >=0
       base.delete('winning_mode')
@@ -23,10 +19,6 @@ class TournamentDecorator < ApplicationDecorator
     else
       I18n.t 'tournamet_modes.pyramidal'
     end
-  end
-
-  def raw_mode
-    model.mode
   end
 
   def winning_mode
@@ -63,16 +55,35 @@ class TournamentDecorator < ApplicationDecorator
     end
   end
 
-  def raw_status
-    model.status
-  end
-
   def officer
     model.officer.name
   end
 
   def current_round
-    model.current_round + 1
+    unless model.current_round.nil?
+      case model.status
+        when 0
+          h.t('tournament.show.not_started')
+        when 1
+          model.current_round + 1
+        when 2
+          h.t('tournament.show.finalized')
+      end
+    end
+  end
+
+  def rounds
+    unless model.rounds.nil?
+      case model.status
+        when 0
+          h.t('tournament.show.not_started')
+        when 1
+          model.rounds + 1
+        when 2
+          h.t('tournament.show.finalized')
+      end
+    end
+
   end
 
   def raw_model
@@ -89,10 +100,18 @@ class TournamentDecorator < ApplicationDecorator
     else
       if h.can? :unregister, model
         inscription = model.inscriptions.find_by(:user_id => user.id)
-        h.content_tag(:div,
-                      h.link_to((h.t 'unregister'), inscription, method: :delete, data: {confirm: (h.t 'are_you_sure')}, class: 'btn btn-success'),
-                      class: 'col-md-2 center-block')
+        h.content_tag(
+            :div,
+            h.link_to((h.t 'unregister'), inscription, method: :delete, data: {confirm: (h.t 'are_you_sure.base')},
+                      class: 'btn btn-success'),
+            class: 'col-md-2 center-block')
       end
+    end
+  end
+
+  def edit_button
+    if h.can? :update, model
+      h.content_tag(:div, h.action_button(model, action: :edit), class: 'col-md-1' )
     end
   end
 
@@ -105,10 +124,13 @@ class TournamentDecorator < ApplicationDecorator
       if model.mode == -1
         ranking_rounds
       else
+        #TODO Add info for pyramidal tournaments
         nil
       end
     end
   end
+
+
 
   private
 

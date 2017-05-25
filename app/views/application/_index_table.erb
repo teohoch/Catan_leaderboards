@@ -1,0 +1,36 @@
+<table id="<%= klass %>_table" class="display index_table" data-language='<%= datatable_language %>'>
+  <thead>
+  <tr>
+    <% attributes.each do |attribute_name,_| %>
+        <th> <%= klass.human_attribute_name(attribute_name) %> </th>
+    <% end %>
+
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% collection.each do |object| %>
+      <tr>
+        <% attributes.each do |attribute_name| %>
+
+            <td align="center"><%= object.decorate.send(attribute_name) %></td>
+
+        <% end %>
+
+
+        <td><%= action_button(object) %></td>
+        <td>
+          <% if can? :update, object %>
+              <%= action_button(object, action: :edit) %>
+          <% end %></td>
+        <td>
+          <% if can? :destroy, object %>
+              <%= action_button(object, action: :delete)%>
+          <% end %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

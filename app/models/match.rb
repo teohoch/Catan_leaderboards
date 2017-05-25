@@ -19,7 +19,7 @@ class Match < ApplicationRecord
   end
 
   def status
-    self.validated ? (I18n.t :ended_f) : (I18n.t :waiting)
+    self.validated ? (I18n.t :ended.F) : (I18n.t :waiting)
   end
 
   def validated_count

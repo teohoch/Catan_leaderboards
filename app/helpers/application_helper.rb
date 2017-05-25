@@ -46,6 +46,48 @@ module ApplicationHelper
     end
   end
 
+  def action_button(object, action: :show, text: nil, data: {}, method: :get)
+    css_class = ['btn']
+
+    case action
+      when :show
+        css_class.append('btn-info')
+        text = (text.nil? ? t('decorator.show') : text )
+        path = object
+      when :edit
+        css_class.append('btn-warning')
+        text = (text.nil? ? t('decorator.edit') : text)
+        path = [:edit, object ]
+      when :delete, :destroy
+        css_class.append('btn-danger')
+        text = (text.nil? ? t('decorator.delete') : text)
+        path = object
+        method = :delete
+        unless data.has_key?('confirm')
+          data['confirm'] = tp("are_you_sure.delete", object.class.human_attribute_name("pronoun"), klass: object.class.model_name.human)
+        end
+        unless data.has_key?('title')
+          data['title'] = t('are_you_sure.base')
+        end
+      when  :create
+        css_class.append('btn-primary')
+        text = (text.nil? ? t('decorator.create') : text)
+        path = [:create, object ]
+      else
+        path = root_path
+    end
+    link_to text, path, class: css_class.join(' '),method: method, data: data
+  end
+
+  def translation_pronoun(phrase, pronoun, *args, &block)
+    if I18n.exists?([phrase,pronoun].join('.'))
+      arg.insert(0,[phrase,pronoun].join('.'))
+    else
+      args.insert(0,phrase)
+    end
+    t(*args, &block)
+  end
+  alias_method :tp, :translation_pronoun
 
   def datatable_language
     if I18n.exists?('table_text.sInfoFiltered')

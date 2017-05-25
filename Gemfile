@@ -56,15 +56,18 @@ gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
 gem 'bootstrap-datepicker-rails'
 gem 'faker'
 
-gem 'draper', '3.0.0.pre1'
+gem 'draper'
+gem 'therubyracer'
 
+gem 'factory_girl_rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
+
   gem 'capybara'
+  gem 'bullet'
 end
 
 group :development do

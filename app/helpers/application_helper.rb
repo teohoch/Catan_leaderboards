@@ -46,23 +46,21 @@ module ApplicationHelper
     end
   end
 
-  def action_button(object, action: :show, text: nil, data: {}, method: :get)
-    css_class = ['btn']
-
+  def action_button(object, action: :show, text: nil, button_class: nil, data: {}, verb: :get, path: nil, field: 'id')
     case action
       when :show
-        css_class.append('btn-info')
+        css_class= button_class.nil? ? 'btn btn-info' : button_class
         text = (text.nil? ? t('decorator.show') : text )
         path = object
       when :edit
-        css_class.append('btn-warning')
+        css_class= button_class.nil? ? 'btn btn-warning' : button_class
         text = (text.nil? ? t('decorator.edit') : text)
         path = [:edit, object ]
       when :delete, :destroy
-        css_class.append('btn-danger')
+        css_class= button_class.nil? ? 'btn btn-danger' : button_class
         text = (text.nil? ? t('decorator.delete') : text)
         path = object
-        method = :delete
+        verb = :delete
         unless data.has_key?('confirm')
           data['confirm'] = tp("are_you_sure.delete", object.class.human_attribute_name("pronoun"), klass: object.class.model_name.human)
         end
@@ -70,13 +68,24 @@ module ApplicationHelper
           data['title'] = t('are_you_sure.base')
         end
       when  :create
-        css_class.append('btn-primary')
+        css_class= button_class.nil? ? 'btn btn-primary' : button_class
         text = (text.nil? ? t('decorator.create') : text)
         path = [:create, object ]
       else
-        path = root_path
+        css_class= button_class.nil? ? 'btn btn-default' : button_class
+        path = path.nil? ? [action, object] : path
     end
-    link_to text, path, class: css_class.join(' '),method: method, data: data
+
+    case verb
+      when :post
+        render partial: 'button_form', locals: {object: object, path: path, text: text, field: field, css_class: css_class, data: data, verb: verb}
+      when :put, :patch
+        raise ArgumentError 'This function should NEVER be used with put or patch. Only use it for simple actions.'
+      when :get, :delete
+        link_to text, path, class: css_class, method: verb, data: data
+      else
+        raise NotImplementedError
+    end
   end
 
   def translation_pronoun(phrase, pronoun, *args, &block)

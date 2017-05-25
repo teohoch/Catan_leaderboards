@@ -8,7 +8,8 @@ class Match < ApplicationRecord
   accepts_nested_attributes_for :user_matches
   validates :date, :location, client_presence: true
 
-  scope :round, -> (round) {where(round: round)}
+  scope :round, -> (round) {includes(:user_matches => :user).where(round: round)}
+  scope :user, -> (user) {includes(:user_matches).where('user_matches.user_id'=>user.id)}
 
   def validated_human
     if self.validated

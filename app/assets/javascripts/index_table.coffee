@@ -3,5 +3,6 @@ jQuery ->
   if($('[id$=_table_wrapper]').length == 0)
     $('.index_table').dataTable(
       {
-        "language": language,"jQueryUI": true
+        "language": language,"jQueryUI": true,
+        responsive: true
       })

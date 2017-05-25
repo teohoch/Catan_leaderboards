@@ -5,16 +5,19 @@ class MatchesController < ApplicationController
   # GET /matches
   # GET /matches.json
   def index
-    @matches = Match.all
     if current_user
-      @user_matches = current_user.matches
+      @matches = Match.includes(:users).all.decorate
+    else
+      @matches = Match.all.decorate
     end
+
   end
 
   # GET /matches/1
   # GET /matches/1.json
   def show
     @match = @match.decorate
+    #TODO Unite @match and @users
     @users = User.joins(:user_matches).select('users.*, user_matches.vp, user_matches.victory_position').where('user_matches.match_id' => @match.id)
     if can? :validate, @match
       @user_match = @match.user_matches.find_by(:user_id => current_user.id)

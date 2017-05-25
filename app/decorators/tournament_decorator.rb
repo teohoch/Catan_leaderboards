@@ -68,6 +68,8 @@ class TournamentDecorator < ApplicationDecorator
           model.current_round + 1
         when 2
           h.t('tournament.show.finalized')
+        else
+          h.t 'invalid'
       end
     end
   end
@@ -84,10 +86,6 @@ class TournamentDecorator < ApplicationDecorator
       end
     end
 
-  end
-
-  def raw_model
-    model
   end
 
   def entrance_fee
@@ -112,6 +110,14 @@ class TournamentDecorator < ApplicationDecorator
   def edit_button
     if h.can? :update, model
       h.content_tag(:div, h.action_button(model, action: :edit), class: 'col-md-1' )
+    end
+  end
+
+  def start_button
+    if h.can? :start, model
+      h.content_tag(:div,
+                    h.action_button(model, action: :start, text:(h.t 'start'), button_class: "btn-info", verb: :post, path: h.start_tournament_path(model)),
+                    class: 'col-md-1')
     end
   end
 

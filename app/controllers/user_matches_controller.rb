@@ -15,7 +15,7 @@ class UserMatchesController < ApplicationController
         format.html { redirect_to back_or_default, notice: (t 'user_match.update.success') }
         format.json { render @user_match, status: :ok }
       else
-        format.html { redirect_to back_or_default, }
+        format.html { redirect_to back_or_default }
         format.json { render json: @user_match.errors, status: :unprocessable_entity }
       end
     end

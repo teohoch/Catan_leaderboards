@@ -1,0 +1,4 @@
+<%= simple_form_for(object, url: path, method: verb )  do |f| %>
+      <%= f.input :"#{field}", as: :hidden %>
+      <%= f.button(:submit_tag, text, class: css_class, data: data) %>
+<% end %>

@@ -6,8 +6,10 @@
     <% end %>
 
     <th></th>
-    <th></th>
-    <th></th>
+    <% if current_user %>
+        <th></th>
+        <th></th>
+    <% end %>
   </tr>
   </thead>
 
@@ -21,15 +23,18 @@
         <% end %>
 
 
-        <td><%= action_button(object) %></td>
-        <td>
-          <% if can? :update, object %>
-              <%= action_button(object, action: :edit) %>
-          <% end %></td>
-        <td>
-          <% if can? :destroy, object %>
-              <%= action_button(object, action: :delete)%>
-          <% end %></td>
+        <td align="center"><%= action_button(object) %></td>
+        <% if current_user %>
+          <td align="center">
+            <% if can? :update, object %>
+                <%= action_button(object, action: :edit) %>
+            <% end %></td>
+          <td align="center">
+            <% if can? :destroy, object %>
+                <%= action_button(object, action: :delete)%>
+            <% end %>
+          </td>
+        <% end %>
       </tr>
   <% end %>
   </tbody>

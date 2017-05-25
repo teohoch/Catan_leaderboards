@@ -1,5 +1,6 @@
 class MatchDecorator < ApplicationDecorator
   delegate_all
+  decorates_finders
   def attributes
     ['n_players','expected_number_players','round','date','location','validated'].map{|key| [key, self.send(key)]}
   end
@@ -15,4 +16,10 @@ class MatchDecorator < ApplicationDecorator
   def location
     model.location.nil? ? (h.t 'not_set') : super
   end
+
+  def validated
+    model.validated ? h.t('simple_form.yes') : h.t('simple_form.no')
+  end
+
+
 end

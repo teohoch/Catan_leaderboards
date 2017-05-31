@@ -109,10 +109,12 @@ es:
           validated: "Validado"
           pronoun: "M"
 
+
         user_match:
           user: "Jugador"
           vp: "Puntos de Victoria"
           pronoun: "M"
+          victory_position: "Posicion de Victoria"
 
 
       errors:
@@ -220,7 +222,7 @@ es:
     validate:
       success: "Partida validada correctamente."
     show:
-      table_title: "Datos del Torneo"
+      table_title: "Datos de la Partida"
   user_match:
     update:
       success: "Relacion Usuario/Partida actualizada correctamente."

@@ -21,5 +21,9 @@ class MatchDecorator < ApplicationDecorator
     model.validated ? h.t('simple_form.yes') : h.t('simple_form.no')
   end
 
+  def show_players
+    h.render partial: 'players', locals: {user_matches: model.user_matches.includes(:user, :match).decorate}
+  end
+
 
 end

@@ -6,16 +6,8 @@
 <div class="row">
   <%= @tournament.edit_button %>
   <%= @tournament.start_button %>
-
-
-
   <%= @tournament.inscription_button(current_user) %>
-
-
-
   <div class="col-md-1">
     <%= link_to (t 'back'), tournaments_path, class: 'btn btn-danger' %>
   </div>
-
-
 </div>

@@ -1,0 +1,27 @@
+<h3>Jugadores</h3>
+<table class="display table table-condensed table-responsive">
+  <thead>
+  <tr>
+    <th><%= User.human_attribute_name(:name) %> </th>
+    <th><%= UserMatch.human_attribute_name(:victory_position) %></th>
+    <th class="center_element"><%= UserMatch.human_attribute_name(:vp) %></th>
+    <th class="center_element"><%= User.human_attribute_name(:position_general) %></th>
+    <th class="center_element"><%= User.human_attribute_name(:position_tournament) %></th>
+    <th class="center_element"><%= User.human_attribute_name(:position_free) %></th>
+    <th class="center_element"><%= User.human_attribute_name(:matches_played) %></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% user_matches.each do |r| %>
+      <tr>
+        <td><%= r.name %></td>
+        <td align="center"><%= r.victory_position%></td>
+        <td align="center"><%= r.vp %></td>
+        <td align="center"><%= r.position_general %></td>
+        <td align="center"><%= r.position_tournament %></td>
+        <td align="center"><%= r.position_free %></td>
+        <td align="center"><%= r.matches_played %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>

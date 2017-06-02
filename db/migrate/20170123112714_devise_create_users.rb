@@ -38,15 +38,15 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.0]
       t.integer :elo_general, null: false, default: 1500
       t.integer :elo_free, null: false, default: 1500
       t.integer :elo_tournament, null: false, default: 1500
-      t.integer :position_general, null: false, default: -1
-      t.integer :position_free, null: false, default: -1
-      t.integer :position_tournament, null: false, default: -1
       t.integer :matches_played, null: false, default: 0
 
     end
 
     add_index :users, :email,                unique: true
     add_index :users, :reset_password_token, unique: true
+    add_index :users, :elo_general
+    add_index :users, :elo_tournament
+    add_index :users, :elo_free
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
   end

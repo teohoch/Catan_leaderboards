@@ -21,7 +21,7 @@ fuser2 = User.new(:email => 'teodoro.hochfarber@gmail.com',
 
 fuser2.save
 
-users = [fuser, fuser2].concat(FactoryGirl.create_list(:user, 10))
+users = [fuser, fuser2].concat(FactoryGirl.create_list(:user, 100, :random_elo, :with_matches))
 
 tournament1 = FactoryGirl.create(:tournament, :pyramidal_1, :with_inscriptions, :with_users, available_users: users.slice(0..7), number_players: 8, n_registered: 8, officer: fuser)
 tournament2 = FactoryGirl.create(:tournament, :pyramidal_1, :with_inscriptions, :with_users, available_users: users.slice(0..8), number_players: 9, n_registered: 9, officer: fuser)

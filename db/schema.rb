@@ -99,10 +99,10 @@ ActiveRecord::Schema.define(version: 20170216021751) do
     t.integer  "elo_general",            default: 1500, null: false
     t.integer  "elo_free",               default: 1500, null: false
     t.integer  "elo_tournament",         default: 1500, null: false
-    t.integer  "position_general",       default: -1,   null: false
-    t.integer  "position_free",          default: -1,   null: false
-    t.integer  "position_tournament",    default: -1,   null: false
     t.integer  "matches_played",         default: 0,    null: false
+    t.index ["elo_free"], name: "index_users_on_elo_free", using: :btree
+    t.index ["elo_general"], name: "index_users_on_elo_general", using: :btree
+    t.index ["elo_tournament"], name: "index_users_on_elo_tournament", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end

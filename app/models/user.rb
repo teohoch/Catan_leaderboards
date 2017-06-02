@@ -1,3 +1,4 @@
+require 'bigdecimal'
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -14,81 +15,24 @@ class User < ApplicationRecord
 
 
   NEWBIE_THRESHOLD = 2
+  AVAILABLE_RANKINGS = [:general, :free, :tournament]
+
+  AVAILABLE_RANKINGS.each do |type|
+    define_method "position_#{type}" do
+      position(type)
+    end
+  end
 
   def to_label
     self.name
   end
 
-  def position_free
-    if self[:position_free] > 0
-      self[:position_free]
+  def position(type)
+    if self.matches_played > NEWBIE_THRESHOLD
+      inner_query = User.select("users.id, DENSE_RANK() OVER(ORDER BY users.elo_#{type.to_s} DESC) AS position").where("matches_played > ?", NEWBIE_THRESHOLD).to_sql
+      User.from("(#{inner_query}) s").where("id = ?", self.id).pluck('s.position').first
     else
-      I18n.t 'not_asigned'
-    end
-  end
-
-  def position_general
-    if self[:position_general] > 0
-      self[:position_general]
-    else
-      I18n.t 'not_asigned'
-    end
-  end
-
-  def position_tournament
-    if self[:position_tournament] > 0
-      self[:position_tournament]
-    else
-      I18n.t 'not_asigned'
-    end
-  end
-
-
-  def self.update_position_general
-    sorted = User.all.order('elo_general DESC')
-    pos = 0
-    last_elo = nil
-    sorted.each do |elem|
-      if elem[:matches_played]>=NEWBIE_THRESHOLD
-        if last_elo != elem[:elo_general]
-          last_elo = elem[:elo_general]
-          pos = pos + 1
-        end
-        elem.update(:position_general => pos)
-        elem.save
-      end
-    end
-  end
-
-  def self.update_position_free
-    sorted = User.all.order('elo_free DESC')
-    pos = 0
-    last_elo = nil
-    sorted.each do |elem|
-      if elem[:matches_played]>=NEWBIE_THRESHOLD
-        if last_elo != elem[:elo_free]
-          last_elo = elem[:elo_free]
-          pos = pos + 1
-        end
-        elem.update(:position_free => pos)
-        elem.save
-      end
-    end
-  end
-
-  def self.update_position_tournament
-    sorted = User.all.order('elo_tournament DESC')
-    pos = 0
-    last_elo = nil
-    sorted.each do |elem|
-      if elem[:matches_played]>=NEWBIE_THRESHOLD
-        if last_elo != elem[:elo_tournament]
-          last_elo = elem[:elo_tournament]
-          pos = pos + 1
-        end
-        elem.update(:position_tournament => pos)
-        elem.save
-      end
+      BigDecimal::INFINITY
     end
   end
 

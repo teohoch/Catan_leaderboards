@@ -53,13 +53,6 @@ class Match < ApplicationRecord
 
         user.save
       end
-
-      if self.tournament_id.nil?
-        User.update_position_general
-      else
-        User.update_position_tournament
-      end
-      User.update_position_free
     end
   end
 

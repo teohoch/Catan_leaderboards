@@ -1,0 +1,17 @@
+<table class="display table table-condensed table-responsive">
+  <thead>
+  <tr>
+    <th class="center_element"><%= User.human_attribute_name(ranking_type) %></th>
+    <th><%= User.human_attribute_name(:name) %> </th>
+  </tr>
+
+  </thead>
+  <tbody>
+  <% users.each do |user| %>
+      <tr>
+        <td align="center"><%= user.send(ranking_type) %></td>
+        <td><%= user.name %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
